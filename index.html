@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI×副業スクール　商品設計まとめ</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Yu Gothic', sans-serif;
+    background: #111;
+    color: #e8e8e8;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+  .container { max-width: 860px; margin: 0 auto; }
+
+  /* タイポグラフィ */
+  h1 { font-size: 24px; font-weight: 600; line-height: 1.3; }
+  h2 { font-size: 18px; font-weight: 600; margin-bottom: 14px; }
+  h3 { font-size: 15px; font-weight: 600; margin-bottom: 10px; }
+  p, .text { font-size: 14px; line-height: 1.7; }
+  .text-sm { font-size: 13px; line-height: 1.6; }
+  .text-secondary { color: #888; }
+  .text-bold { font-weight: 600; }
+
+  /* レイアウト */
+  .stack { display: flex; flex-direction: column; }
+  .stack-4  { gap: 4px; }
+  .stack-6  { gap: 6px; }
+  .stack-8  { gap: 8px; }
+  .stack-10 { gap: 10px; }
+  .stack-12 { gap: 12px; }
+  .stack-14 { gap: 14px; }
+  .stack-16 { gap: 16px; }
+  .row { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 8px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+  /* セクション */
+  .section { margin-bottom: 40px; }
+  .divider { border: none; border-top: 1px solid #2a2a2a; margin: 32px 0; }
+
+  /* コンポーネント */
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .pill-success { background: #1a3a2a; color: #4ade80; }
+  .pill-warning { background: #3a2a10; color: #fbbf24; }
+  .pill-default { background: #222; color: #888; }
+
+  .block { background: #1a1a1a; border-radius: 8px; padding: 12px 16px; }
+  .bordered { border: 1px solid #2a2a2a; border-radius: 8px; padding: 12px 16px; }
+  .highlight { background: #1e1e1e; border-radius: 8px; padding: 16px 20px; }
+
+  /* カード */
+  .card { border: 1px solid #2a2a2a; border-radius: 10px; overflow: hidden; }
+  .card-header {
+    background: #1a1a1a;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #2a2a2a;
+  }
+  .card-header-title { font-size: 14px; font-weight: 600; }
+  .card-body { padding: 16px; }
+
+  /* テーブル */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: #1a1a1a; color: #888; font-weight: 500; padding: 8px 12px; text-align: left; border-bottom: 1px solid #2a2a2a; }
+  td { padding: 9px 12px; border-bottom: 1px solid #1e1e1e; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+
+  /* Callout */
+  .callout { border-radius: 8px; padding: 12px 16px; font-size: 13px; }
+  .callout-success { background: #0d2015; border: 1px solid #1a4030; color: #ccc; }
+  .callout-warning { background: #221500; border: 1px solid #3a2800; color: #ccc; }
+  .callout-info    { background: #0d1a2a; border: 1px solid #1a3050; color: #ccc; }
+
+  /* Stat */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .stat { background: #1a1a1a; border-radius: 8px; padding: 14px 16px; }
+  .stat-value { font-size: 20px; font-weight: 600; color: #e8e8e8; }
+  .stat-value.accent { color: #4ade80; }
+  .stat-label { font-size: 12px; color: #888; margin-top: 4px; }
+
+  /* コピー案カード */
+  .copy-card { border: 1px solid #2a2a2a; border-radius: 8px; overflow: hidden; }
+  .copy-card-header { background: #1a1a1a; padding: 8px 14px; display: flex; gap: 8px; align-items: center; }
+  .copy-card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .copy-card-body .copy-text { font-size: 13px; line-height: 1.7; }
+  .copy-card-body .copy-point { background: #1a1a1a; border-radius: 4px; padding: 6px 10px; font-size: 12px; color: #888; }
+
+  /* ヘッダー */
+  .page-header { margin-bottom: 40px; display: flex; flex-direction: column; gap: 6px; }
+  .page-header h1 { margin-bottom: 4px; }
+
+  @media (max-width: 640px) {
+    .grid-2, .grid-3, .grid-4, .stat-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ヘッダー -->
+  <div class="page-header">
+    <h1>AI×副業スクール　商品設計まとめ</h1>
+    <p class="text-sm text-secondary">2026-05-22　現時点で確定している戦略・ペルソナ・設計・数字をすべてまとめた資料</p>
+    <div class="row" style="margin-top:4px">
+      <span class="pill pill-success">商品ポジション確定</span>
+      <span class="pill pill-success">ペルソナ確定</span>
+      <span class="pill pill-success">カリキュラム設計確定</span>
+      <span class="pill pill-success">コピー方向性確定</span>
+      <span class="pill pill-warning">価格・サポート体制 未確定</span>
+    </div>
+  </div>
+
+  <!-- PART 1 -->
+  <div class="section">
+    <h2>PART 1　市場と競合</h2>
+    <p class="text-sm" style="margin-bottom:14px">「AI×副業・スキルアップ」市場は大手10社以上が参入済み。市場の存在は証明されている。論点は「市場があるか」ではなく「どう差別化するか」のフェーズ。</p>
+    <table>
+      <thead><tr><th>タイプ</th><th>代表競合</th><th>弱点（自社が入れる隙間）</th></tr></thead>
+      <tbody>
+        <tr><td>コミュニティ型</td><td>SHIFT AI（54万）・DMM生成AI</td><td>個別設計が弱い。行動できない人が出やすい</td></tr>
+        <tr><td>伴走収益化型</td><td>デジハク（30万）・byTech（30万）</td><td>現役実績がない。「今も稼いでいるか」が見えない</td></tr>
+        <tr><td>マネタイズ特化型</td><td>わどスクール</td><td>価格非公開・詐欺っぽいと思われるリスク</td></tr>
+        <tr><td>技術深耕型</td><td>キカガク（79万）・datamix（107万）</td><td>副業直結ではない。初心者には遠すぎる</td></tr>
+      </tbody>
+    </table>
+    <div class="block" style="margin-top:14px">
+      <p class="text-sm"><strong>空白地帯：</strong>「今も現役でSNS・YouTubeを運営して稼いでいる講師陣」＋「個人に合った稼ぎ方を一緒に設計する伴走」＋「AI最新情報を常に提供」の組み合わせは競合10社のどこも持っていない。</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PART 2 -->
+  <div class="section">
+    <div class="row" style="margin-bottom:14px">
+      <h2 style="margin-bottom:0">PART 2　ターゲットペルソナ</h2>
+      <span class="pill pill-success">確定</span>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-header-title">鈴木くん（仮）　35歳・男性・会社員</span>
+        <span class="pill pill-success">副業ルート</span>
+      </div>
+      <div class="card-body stack stack-16">
+        <div class="grid-2">
+          <div class="stack stack-4">
+            <p class="text-sm text-secondary">状況</p>
+            <p class="text-sm">年収500万の壁を超えられない。彼女はいるが経済的不安で結婚に踏み出せない</p>
+          </div>
+          <div class="stack stack-4">
+            <p class="text-sm text-secondary">日常</p>
+            <p class="text-sm">ダラダラ残業 → Netflix。飲み会は会社への愚痴。スマホで「副業 楽」「AI 稼ぐ」をよく検索している</p>
+          </div>
+          <div class="stack stack-4">
+            <p class="text-sm text-secondary">欲求</p>
+            <p class="text-sm">楽して稼ぎたい。プログラミングや難しい勉強はしたくない。仕事への自負はあるが面倒くさがり</p>
+          </div>
+          <div class="stack stack-4">
+            <p class="text-sm text-secondary">購買トリガー</p>
+            <p class="text-sm">YouTubeで「AIで年収を上げる」系の動画を見て「この人の言ってることは本物だ」と感じた。動画の内容に惹かれてチャンネルを見続け、スクールの存在を知った</p>
+          </div>
+        </div>
+        <hr class="divider" style="margin:0">
+        <div class="stack stack-8">
+          <p class="text-sm text-bold">購入の障壁（ここを解消しないと買わない）</p>
+          <div class="grid-3">
+            <div class="block stack stack-4">
+              <p class="text-sm text-secondary">障壁①</p>
+              <p class="text-sm">情報が多すぎて行動できない。何が本物かわからない</p>
+            </div>
+            <div class="block stack stack-4">
+              <p class="text-sm text-secondary">障壁②</p>
+              <p class="text-sm">高額を払ってやり切れなかったら怖い。自己不信がある</p>
+            </div>
+            <div class="block stack stack-4">
+              <p class="text-sm text-secondary">障壁③</p>
+              <p class="text-sm">「稼げます」系に何度か振り回された。信頼できるか不安</p>
+            </div>
+          </div>
+        </div>
+        <div class="highlight">
+          <p class="text-sm text-bold" style="margin-bottom:4px">Before → After</p>
+          <p class="text-sm">副収入ゼロ・結婚に踏み出せない経済不安　→　AI画像・動画生成で初案件を完遂し副業月10万を達成。将来への具体的な一歩を踏み出した</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PART 3 -->
+  <div class="section">
+    <h2>PART 3　商品ポジション</h2>
+    <div class="highlight" style="margin-bottom:14px">
+      <p style="font-size:15px; font-weight:600; line-height:1.6">「現役実績のある講師が、あなた専用の稼ぎ方を設計して初案件獲得まで伴走するAIスクール」</p>
+    </div>
+    <div class="grid-2 stack-10">
+      <div class="bordered stack stack-4">
+        <p class="text-sm text-bold">① 現役実績</p>
+        <p class="text-sm text-secondary">YouTube金の盾・銀の盾取得。「今も稼いでいる人が教える」から再現性がある。競合10社どこもこの訴求ができない</p>
+      </div>
+      <div class="bordered stack stack-4">
+        <p class="text-sm text-bold">② 最新情報を常に提供</p>
+        <p class="text-sm text-secondary">AIは変化が速い。現役で実務を動かしているから「今使えるもの」だけを教えられる。去年の教材で教える競合との決定的な差</p>
+      </div>
+      <div class="bordered stack stack-4">
+        <p class="text-sm text-bold">③ 個別設計（3ルート）</p>
+        <p class="text-sm text-secondary">副業・フリーランス・転職の3ルートに対応。「あなたはどれが向いているか」を一緒に決めるところから始める。カリキュラム固定の大手とは違う</p>
+      </div>
+      <div class="bordered stack stack-4">
+        <p class="text-sm text-bold">④ 目的から逆算したAI活用</p>
+        <p class="text-sm text-secondary">「AIで何をするか」が最初から明確。副業収入を作るという目的に対して、何のツールをどう使うかを逆算して設計する。AIを学ぶこと自体が目的になっている競合との決定的な差</p>
+      </div>
+      <div class="bordered stack stack-4">
+        <p class="text-sm text-bold">⑤ 現場直結の知識</p>
+        <p class="text-sm text-secondary">AIの汎用的な使い方ではなく、マーケティング業務（YouTube・SNS・広告・画像/動画生成）に直結した使い方が身につく。学んだその日から案件に使える</p>
+      </div>
+      <div class="bordered stack stack-4">
+        <p class="text-sm text-bold">⑥ 現場参加の機会</p>
+        <p class="text-sm text-secondary">YouTube・SNS・広告など幅広いジャンルでAI×マーケティングを現在進行形で動かしているチームと一緒に仕事ができる。「学ぶ場所」ではなく「現場に参加できる場所」</p>
+      </div>
+      <div class="bordered stack stack-4">
+        <p class="text-sm text-bold">⑦ 透明性（面談で開示）</p>
+        <p class="text-sm text-secondary">受講生の収入・成功事例・価格の根拠はLP上では出さず、個別面談ですべて説明する。「面談に来れば全部わかる」という設計で、問い合わせへの動機づけにする</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PART 4 -->
+  <div class="section">
+    <h2>PART 4　スクール設計</h2>
+    <div class="callout callout-success" style="margin-bottom:14px">
+      <p class="text-sm"><strong>核心思想：</strong>最初から大きなことはやらない。AI画像・動画生成という「誰でも使えるツール」から始めて、小さな案件を1件完遂 → 成功体験 → 次のステップという積み上げ設計。</p>
+    </div>
+    <div class="grid-3" style="margin-bottom:14px">
+      <div class="bordered stack stack-6">
+        <p class="text-sm text-secondary">STEP 1</p>
+        <p class="text-sm text-bold">AI画像・動画生成ツールを使いこなす</p>
+        <p class="text-sm text-secondary">誰でもできる。「自分にもできる」という最初の成功体験を作る</p>
+      </div>
+      <div class="bordered stack stack-6">
+        <p class="text-sm text-secondary">STEP 2</p>
+        <p class="text-sm text-bold">自走できるスキルで初案件を取る</p>
+        <p class="text-sm text-secondary">自分で案件を取れる力を育てるのが前提。実力がついた優秀な受講生には自社プロジェクトへの参加機会も</p>
+      </div>
+      <div class="bordered stack stack-6">
+        <p class="text-sm text-secondary">STEP 3</p>
+        <p class="text-sm text-bold">案件を積み上げて月10万の収入を作る</p>
+        <p class="text-sm text-secondary">成功パターンをルーティン化。副業収入の柱が完成</p>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="block stack stack-4">
+        <p class="text-sm text-bold">サポート方針</p>
+        <p class="text-sm text-secondary">3人が時間を使う伴走は悪手。動画・解説コンテンツで代替できる部分を設計し、個別サポートは「詰まったとき」に限定する</p>
+      </div>
+      <div class="block stack stack-4">
+        <div class="row"><p class="text-sm text-bold">価格設計</p><span class="pill pill-warning">未確定</span></div>
+        <p class="text-sm text-secondary">目標単価80〜100万円。Phase 0は少人数モニターで事例を作りつつ、Phase 1以降は人数上限なしでスケールを目指す</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PART 5 -->
+  <div class="section">
+    <h2>PART 5　LPコピーの方向性</h2>
+    <div class="grid-2" style="margin-bottom:24px">
+      <div class="stack stack-6">
+        <div class="row"><span class="pill pill-success">使う</span><p class="text-sm text-bold">刺さるワード</p></div>
+        <div class="block"><p class="text-sm">「難しい勉強ゼロ、プログラミング不要」</p></div>
+        <div class="block"><p class="text-sm">「何をすればいいか、一緒に決めます」</p></div>
+        <div class="block"><p class="text-sm">「まず小さな1件から。気づいたら月10万になってた」</p></div>
+        <div class="block"><p class="text-sm">「AIは変化が速い。現役だから常に最新の稼ぎ方を教えられる」</p></div>
+        <div class="block"><p class="text-sm">「現在進行形のAI×マーケ現場と一緒に仕事ができる」</p></div>
+        <div class="block"><p class="text-sm">「汎用的なAI知識じゃない。マーケティング業務に直結した使い方が身につく」</p></div>
+        <div class="block"><p class="text-sm">「学んだその日から案件に使える」</p></div>
+        <div class="block"><p class="text-sm">「AIは手段。何のために使うかが最初から明確」</p></div>
+      </div>
+      <div class="stack stack-6">
+        <div class="row"><span class="pill pill-warning">避ける</span><p class="text-sm text-bold">競合と同じになるワード</p></div>
+        <div class="block"><p class="text-sm text-secondary">「実践型」「未経験OK」「最短で」— 10社全員が使っている</p></div>
+        <div class="block"><p class="text-sm text-secondary">「伴走」「マンツーマン」— 差別化にならない</p></div>
+        <div class="block"><p class="text-sm text-secondary">「スキルアップ」「学習」— 勉強感が出て鈴木くんが離れる</p></div>
+        <div class="block"><p class="text-sm text-secondary">「頑張れば稼げる」— 努力を求める表現はNG</p></div>
+        <div class="block"><p class="text-sm text-secondary">「忙しい会社員でも、スキマ時間で月10万」— 副業系コンテンツが使いすぎ、陳腐</p></div>
+      </div>
+    </div>
+
+    <hr class="divider" style="margin:20px 0">
+
+    <h3>ファーストビューコピー案（たたき台・数字は仮）</h3>
+    <div class="grid-3">
+      <div class="copy-card">
+        <div class="copy-card-header">
+          <span class="text-sm text-bold">A案</span>
+          <span class="text-sm text-secondary">稼働証明型</span>
+        </div>
+        <div class="copy-card-body">
+          <p class="copy-text">難しい勉強ゼロ。AI画像・動画生成で、会社員が副業月10万を作る方法。汎用的なAI知識じゃなく、マーケティング業務に直結した使い方が身につきます。現在進行形のAI×マーケチームと一緒に仕事ができます。</p>
+          <p class="copy-point">「学んで終わり」ではなく「即案件に使える」を前面に。現役実績で信頼を担保</p>
+        </div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-header">
+          <span class="text-sm text-bold">B案</span>
+          <span class="text-sm text-secondary">透明性訴求型</span>
+        </div>
+        <div class="copy-card-body">
+          <p class="copy-text">受講料・成功事例・具体的なサポート内容、個別面談でなんでもお話しします。まずは気軽にご相談ください。</p>
+          <p class="copy-point">面談への誘導を最優先。「まず話を聞きに来るだけ」で敷居を下げる</p>
+        </div>
+      </div>
+      <div class="copy-card">
+        <div class="copy-card-header">
+          <span class="text-sm text-bold">C案</span>
+          <span class="text-sm text-secondary">3ルート設計型</span>
+        </div>
+        <div class="copy-card-body">
+          <p class="copy-text">副業・フリーランス・転職。あなたに合った稼ぎ方を現役講師が一緒に設計します。プログラミング不要。</p>
+          <p class="copy-point">選択肢の広さを訴求。「自分向けかどうか」の不安を解消</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- PART 6 -->
+  <div class="section">
+    <h2>PART 6　数字設計とロードマップ</h2>
+    <div class="stat-grid" style="margin-bottom:16px">
+      <div class="stat"><div class="stat-value">80〜100万</div><div class="stat-label">目標単価（未確定）</div></div>
+      <div class="stat"><div class="stat-value accent">120名</div><div class="stat-label">年間目標人数</div></div>
+      <div class="stat"><div class="stat-value accent">1億円</div><div class="stat-label">年間売上目標</div></div>
+      <div class="stat"><div class="stat-value">2027年4月</div><div class="stat-label">達成目標</div></div>
+    </div>
+    <table style="margin-bottom:16px">
+      <thead><tr><th>フェーズ</th><th>期間</th><th>月間入会</th><th>主なアクション</th></tr></thead>
+      <tbody>
+        <tr><td>Phase 0（今）</td><td>5〜6月</td><td>0名</td><td>コピー確定・事例1件作成・LP制作・モニター候補リストアップ</td></tr>
+        <tr><td>Phase 1（事例づくり）</td><td>7〜9月</td><td>2〜3名/月</td><td>成功事例を積み上げてLP・動画・広告の素材にする</td></tr>
+        <tr><td>Phase 2（集客拡大）</td><td>10〜12月</td><td>5〜10名/月</td><td>YouTube・SNS・広告を本格稼働</td></tr>
+        <tr><td>Phase 3（スケール）</td><td>1〜4月</td><td>20〜30名/月</td><td>仕組み化・コンテンツ拡充・エージェント連携追加</td></tr>
+      </tbody>
+    </table>
+    <div class="callout callout-warning">
+      <p class="text-sm"><strong>次の打ち合わせで決めること：</strong>①最終価格（80万 or 100万）　②サポート体制の設計（動画 vs 個別の割合）　③Phase 0モニターの条件と人数</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
