@@ -116,8 +116,8 @@ def get_comments(youtube, video: dict, max_per_video: int = 20) -> list[dict]:
         request = youtube.commentThreads().list(
             videoId=video["id"],
             part="snippet",
-            maxResults=min(max_per_video, 100),
-            order="relevance",
+            maxResults=100,  # API上限は1回100件。ページネーションで上限まで取得
+            order="time",    # 全コメントを時系列で取得（relevanceだと人気コメのみ）
             textFormat="plainText",
         )
         while request and len(comments) < max_per_video:
@@ -184,31 +184,51 @@ def get_or_create_spreadsheet(service, channel_name: str) -> str:
     return new_id
 
 
-def ensure_header(service, spreadsheet_id: str) -> None:
-    """1行目にヘッダーがなければ書き込む。"""
-    res = service.spreadsheets().values().get(
+def get_sheet_id(service, spreadsheet_id: str, sheet_title: str) -> int | None:
+    """シートタイトルからsheetId（数値）を返す。存在しなければNone。"""
+    meta = service.spreadsheets().get(spreadsheetId=spreadsheet_id).execute()
+    for s in meta.get("sheets", []):
+        if s["properties"]["title"] == sheet_title:
+            return s["properties"]["sheetId"]
+    return None
+
+
+def ensure_sheet(service, spreadsheet_id: str, title: str) -> int:
+    """指定タイトルのシートがなければ作成し、sheetIdを返す。"""
+    sheet_id = get_sheet_id(service, spreadsheet_id, title)
+    if sheet_id is not None:
+        return sheet_id
+    res = service.spreadsheets().batchUpdate(
         spreadsheetId=spreadsheet_id,
-        range="コメント一覧!A1:G1",
+        body={"requests": [{"addSheet": {"properties": {"title": title}}}]},
     ).execute()
-    existing = res.get("values", [])
-    if not existing or existing[0] != HEADERS:
-        service.spreadsheets().values().update(
-            spreadsheetId=spreadsheet_id,
-            range="コメント一覧!A1",
-            valueInputOption="RAW",
-            body={"values": [HEADERS]},
-        ).execute()
+    return res["replies"][0]["addSheet"]["properties"]["sheetId"]
 
 
-def append_rows(service, spreadsheet_id: str, rows: list[list]) -> None:
-    """データ行をスプレッドシートに追記する。"""
-    service.spreadsheets().values().append(
+def clear_and_write(service, spreadsheet_id: str, sheet_title: str, rows: list[list]) -> None:
+    """シートを全消去してヘッダー＋データを書き直す。"""
+    service.spreadsheets().values().clear(
         spreadsheetId=spreadsheet_id,
-        range="コメント一覧!A1",
+        range=f"{sheet_title}!A:Z",
+    ).execute()
+    service.spreadsheets().values().update(
+        spreadsheetId=spreadsheet_id,
+        range=f"{sheet_title}!A1",
         valueInputOption="RAW",
-        insertDataOption="INSERT_ROWS",
         body={"values": rows},
     ).execute()
+
+
+def write_summary(service, spreadsheet_id: str, videos: list[dict], comment_counts: dict) -> None:
+    """動画別サマリーシートを書き直す。"""
+    ensure_sheet(service, spreadsheet_id, "動画別サマリー")
+    summary_headers = ["動画タイトル", "動画URL", "コメント数"]
+    rows = [summary_headers]
+    for v in videos:
+        rows.append([v["title"], v["url"], comment_counts.get(v["id"], 0)])
+    # 合計行
+    rows.append(["【合計】", "", sum(comment_counts.values())])
+    clear_and_write(service, spreadsheet_id, "動画別サマリー", rows)
 
 
 # ── メイン ─────────────────────────────────────────────
@@ -217,7 +237,7 @@ def main():
     parser = argparse.ArgumentParser(description="YouTube コメント収集 → Google Sheets")
     parser.add_argument("--channel", required=True, help="YouTube チャンネルID")
     parser.add_argument("--videos",  type=int, default=50,  help="取得する動画数（デフォルト: 50）")
-    parser.add_argument("--max",     type=int, default=200, help="1動画あたりの最大コメント数（デフォルト: 200）")
+    parser.add_argument("--max",     type=int, default=500, help="1動画あたりの最大コメント数（デフォルト: 500）")
     parser.add_argument("--dry-run", action="store_true",   help="Sheetsに書かずコンソールだけに出力")
     args = parser.parse_args()
 
@@ -234,10 +254,11 @@ def main():
     videos = get_channel_videos(youtube, args.channel, max_videos=args.videos)
     print(f"   {len(videos)} 件取得")
 
-    per_video = max(1, args.max // len(videos)) if videos else args.max
     all_rows = []
+    comment_counts = {}  # video_id → コメント数
     for i, video in enumerate(videos, 1):
-        comments = get_comments(youtube, video, max_per_video=per_video)
+        comments = get_comments(youtube, video, max_per_video=args.max)
+        comment_counts[video["id"]] = len(comments)
         for c in comments:
             all_rows.append([
                 c["published_at"],
@@ -262,10 +283,16 @@ def main():
     print("🔐 Google Sheets に接続中…")
     service = get_sheets_service()
     spreadsheet_id = get_or_create_spreadsheet(service, channel_name)
-    ensure_header(service, spreadsheet_id)
-    append_rows(service, spreadsheet_id, all_rows)
 
-    print(f"✅ {len(all_rows)} 件を書き込みました")
+    # コメント一覧：全消去して書き直し（重複なし）
+    ensure_sheet(service, spreadsheet_id, "コメント一覧")
+    clear_and_write(service, spreadsheet_id, "コメント一覧", [HEADERS] + all_rows)
+    print(f"✅ コメント一覧: {len(all_rows)} 件を書き込みました")
+
+    # 動画別サマリー
+    write_summary(service, spreadsheet_id, videos, comment_counts)
+    print(f"✅ 動画別サマリー: {len(videos)} 動画分を書き込みました")
+
     print(f"📊 https://docs.google.com/spreadsheets/d/{spreadsheet_id}")
 
 
