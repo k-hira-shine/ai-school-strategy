@@ -32,7 +32,7 @@ SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 # スプレッドシートのヘッダー行
 HEADERS = [
     "日付", "チャンネル名", "動画タイトル", "動画URL",
-    "いいね数", "制約カテゴリ", "コメント本文"
+    "いいね数", "種別", "制約カテゴリ", "コメント本文"
 ]
 
 # 制約カテゴリの自動分類
@@ -109,13 +109,13 @@ def get_channel_videos(youtube, channel_id: str, max_videos: int = 50) -> list[d
     return videos[:max_videos]
 
 
-def get_comments(youtube, video: dict, max_per_video: int = 20) -> list[dict]:
-    """1動画分のコメント（本文・いいね数・日付）を取得する。"""
+def get_comments(youtube, video: dict, max_per_video: int = 500) -> list[dict]:
+    """1動画分のトップレベルコメント＋返信を取得する。"""
     comments = []
     try:
         request = youtube.commentThreads().list(
             videoId=video["id"],
-            part="snippet",
+            part="snippet,replies",
             maxResults=100,  # API上限は1回100件。ページネーションで上限まで取得
             order="time",    # 全コメントを時系列で取得（relevanceだと人気コメのみ）
             textFormat="plainText",
@@ -123,14 +123,53 @@ def get_comments(youtube, video: dict, max_per_video: int = 20) -> list[dict]:
         while request and len(comments) < max_per_video:
             res = request.execute()
             for item in res.get("items", []):
+                # トップレベルコメント
                 s = item["snippet"]["topLevelComment"]["snippet"]
+                thread_id = item["id"]
                 comments.append({
                     "text":         s["textDisplay"],
                     "likes":        s.get("likeCount", 0),
                     "published_at": s["publishedAt"][:10],
                     "video_title":  video["title"],
                     "video_url":    video["url"],
+                    "kind":         "コメント",
                 })
+                # 返信（replies に含まれていれば取得）
+                for reply in item.get("replies", {}).get("comments", []):
+                    r = reply["snippet"]
+                    comments.append({
+                        "text":         r["textDisplay"],
+                        "likes":        r.get("likeCount", 0),
+                        "published_at": r["publishedAt"][:10],
+                        "video_title":  video["title"],
+                        "video_url":    video["url"],
+                        "kind":         "返信",
+                    })
+                # 返信が多い場合（replies に全件ない場合）は Comments.list で追加取得
+                total_replies = item["snippet"].get("totalReplyCount", 0)
+                fetched_replies = len(item.get("replies", {}).get("comments", []))
+                if total_replies > fetched_replies:
+                    rep_req = youtube.comments().list(
+                        parentId=thread_id,
+                        part="snippet",
+                        maxResults=100,
+                        textFormat="plainText",
+                    )
+                    fetched_ids = {r["id"] for r in item.get("replies", {}).get("comments", [])}
+                    while rep_req:
+                        rep_res = rep_req.execute()
+                        for r_item in rep_res.get("items", []):
+                            if r_item["id"] not in fetched_ids:
+                                r = r_item["snippet"]
+                                comments.append({
+                                    "text":         r["textDisplay"],
+                                    "likes":        r.get("likeCount", 0),
+                                    "published_at": r["publishedAt"][:10],
+                                    "video_title":  video["title"],
+                                    "video_url":    video["url"],
+                                    "kind":         "返信",
+                                })
+                        rep_req = youtube.comments().list_next(rep_req, rep_res)
             request = youtube.commentThreads().list_next(request, res)
     except Exception:
         # コメント無効の動画はスキップ
@@ -266,6 +305,7 @@ def main():
                 c["video_title"],
                 c["video_url"],
                 c["likes"],
+                c.get("kind", "コメント"),
                 classify(c["text"]),
                 c["text"],
             ])
