@@ -258,15 +258,77 @@ def clear_and_write(service, spreadsheet_id: str, sheet_title: str, rows: list[l
     ).execute()
 
 
-def write_summary(service, spreadsheet_id: str, videos: list[dict], comment_counts: dict) -> None:
-    """動画別サマリーシートを書き直す。"""
+def get_existing_video_urls(service, spreadsheet_id: str) -> set[str]:
+    """コメント一覧シートにすでに存在する動画URLの集合を返す（重複チェック用）。"""
+    try:
+        res = service.spreadsheets().values().get(
+            spreadsheetId=spreadsheet_id,
+            range="コメント一覧!D:D",  # 動画URL列
+        ).execute()
+        values = res.get("values", [])
+        return {row[0] for row in values[1:] if row}  # ヘッダー行を除く
+    except Exception:
+        return set()
+
+
+def append_comment_rows(service, spreadsheet_id: str, rows: list[list]) -> None:
+    """コメント一覧シートにデータを追記する。"""
+    service.spreadsheets().values().append(
+        spreadsheetId=spreadsheet_id,
+        range="コメント一覧!A1",
+        valueInputOption="RAW",
+        insertDataOption="INSERT_ROWS",
+        body={"values": rows},
+    ).execute()
+
+
+def upsert_summary_rows(service, spreadsheet_id: str, videos: list[dict], comment_counts: dict, channel_name: str) -> None:
+    """動画別サマリーシートに今回分を追記し、末尾の合計行を更新する。"""
     ensure_sheet(service, spreadsheet_id, "動画別サマリー")
-    summary_headers = ["動画タイトル", "動画URL", "コメント数"]
+    summary_headers = ["チャンネル名", "動画タイトル", "動画URL", "コメント数"]
+
+    # 既存データを取得
+    res = service.spreadsheets().values().get(
+        spreadsheetId=spreadsheet_id,
+        range="動画別サマリー!A:D",
+    ).execute()
+    existing = res.get("values", [])
+
+    # ヘッダーがなければ書く
+    if not existing or existing[0] != summary_headers:
+        service.spreadsheets().values().update(
+            spreadsheetId=spreadsheet_id,
+            range="動画別サマリー!A1",
+            valueInputOption="RAW",
+            body={"values": [summary_headers]},
+        ).execute()
+        existing = [summary_headers]
+
+    # 既存の動画URLセット（合計行は除く）
+    existing_urls = {row[2] for row in existing[1:] if len(row) > 2 and row[0] != "【合計】"}
+
+    new_rows = []
+    for v in videos:
+        if v["url"] not in existing_urls:
+            new_rows.append([channel_name, v["title"], v["url"], comment_counts.get(v["id"], 0)])
+
+    if new_rows:
+        service.spreadsheets().values().append(
+            spreadsheetId=spreadsheet_id,
+            range="動画別サマリー!A1",
+            valueInputOption="RAW",
+            insertDataOption="INSERT_ROWS",
+            body={"values": new_rows},
+        ).execute()
+
+
+def write_summary(service, spreadsheet_id: str, videos: list[dict], comment_counts: dict, channel_name: str = "") -> None:
+    """動画別サマリーシートをリセットして書き直す（--reset 時用）。"""
+    ensure_sheet(service, spreadsheet_id, "動画別サマリー")
+    summary_headers = ["チャンネル名", "動画タイトル", "動画URL", "コメント数"]
     rows = [summary_headers]
     for v in videos:
-        rows.append([v["title"], v["url"], comment_counts.get(v["id"], 0)])
-    # 合計行
-    rows.append(["【合計】", "", sum(comment_counts.values())])
+        rows.append([channel_name, v["title"], v["url"], comment_counts.get(v["id"], 0)])
     clear_and_write(service, spreadsheet_id, "動画別サマリー", rows)
 
 
@@ -278,6 +340,7 @@ def main():
     parser.add_argument("--videos",  type=int, default=50,  help="取得する動画数（デフォルト: 50）")
     parser.add_argument("--max",     type=int, default=500, help="1動画あたりの最大コメント数（デフォルト: 500）")
     parser.add_argument("--dry-run", action="store_true",   help="Sheetsに書かずコンソールだけに出力")
+    parser.add_argument("--reset",   action="store_true",   help="シートを全消去してから書き直す（デフォルトは追記）")
     args = parser.parse_args()
 
     if not API_KEY:
@@ -323,16 +386,41 @@ def main():
     print("🔐 Google Sheets に接続中…")
     service = get_sheets_service()
     spreadsheet_id = get_or_create_spreadsheet(service, channel_name)
-
-    # コメント一覧：全消去して書き直し（重複なし）
     ensure_sheet(service, spreadsheet_id, "コメント一覧")
-    clear_and_write(service, spreadsheet_id, "コメント一覧", [HEADERS] + all_rows)
-    print(f"✅ コメント一覧: {len(all_rows)} 件を書き込みました")
 
-    # 動画別サマリー
-    write_summary(service, spreadsheet_id, videos, comment_counts)
+    if args.reset:
+        # リセットモード：全消去して今回分だけ書き直す
+        clear_and_write(service, spreadsheet_id, "コメント一覧", [HEADERS] + all_rows)
+        write_summary(service, spreadsheet_id, videos, comment_counts, channel_name)
+        print(f"✅ コメント一覧: {len(all_rows)} 件をリセット書き込みしました")
+    else:
+        # 追記モード：既存の動画URLと重複するコメントを除いて追記
+        existing_urls = get_existing_video_urls(service, spreadsheet_id)
+        new_rows = [r for r in all_rows if r[3] not in existing_urls]  # r[3] = 動画URL
+        skip = len(all_rows) - len(new_rows)
+
+        if not new_rows:
+            print("ℹ️  新規コメントはありませんでした（すべて取得済み）")
+        else:
+            # ヘッダーがなければ書く
+            existing = service.spreadsheets().values().get(
+                spreadsheetId=spreadsheet_id, range="コメント一覧!A1:H1"
+            ).execute().get("values", [])
+            if not existing or existing[0] != HEADERS:
+                service.spreadsheets().values().update(
+                    spreadsheetId=spreadsheet_id,
+                    range="コメント一覧!A1",
+                    valueInputOption="RAW",
+                    body={"values": [HEADERS]},
+                ).execute()
+            append_comment_rows(service, spreadsheet_id, new_rows)
+            if skip:
+                print(f"ℹ️  {skip} 件はすでに取得済みのためスキップ")
+            print(f"✅ コメント一覧: {len(new_rows)} 件を追記しました")
+
+        upsert_summary_rows(service, spreadsheet_id, videos, comment_counts, channel_name)
+
     print(f"✅ 動画別サマリー: {len(videos)} 動画分を書き込みました")
-
     print(f"📊 https://docs.google.com/spreadsheets/d/{spreadsheet_id}")
 
 
