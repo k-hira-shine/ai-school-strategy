@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>勉強会動画プロット（v4）</title>
+<style>
+  :root {
+    --bg: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-elevated: #f0f1f3;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555555;
+    --text-tertiary: #888888;
+    --stroke: #d0d5dd;
+    --stroke-light: #e8eaed;
+    --accent: #2563eb;
+    --accent-bg: #dbeafe;
+    --accent-text: #1e40af;
+    --success: #dcfce7;
+    --success-text: #16a34a;
+    --warn-bg: #fef9c3;
+    --warn-text: #a16207;
+    --section-1: #eff6ff;
+    --section-1-border: #bfdbfe;
+    --section-2: #faf5ff;
+    --section-2-border: #e9d5ff;
+    --section-3: #ecfdf5;
+    --section-3-border: #a7f3d0;
+    --section-4: #fff7ed;
+    --section-4-border: #fed7aa;
+    --section-5: #fef2f2;
+    --section-5-border: #fecaca;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.7;
+    padding: 32px 24px 64px;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+  h2 {
+    font-size: 18px; font-weight: 700;
+    margin-top: 36px; margin-bottom: 14px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--accent);
+    color: var(--accent-text);
+  }
+  h3 { font-size: 15px; font-weight: 700; margin-top: 20px; margin-bottom: 8px; color: var(--text-primary); }
+  h4 { font-size: 14px; font-weight: 600; margin-top: 16px; margin-bottom: 6px; color: var(--text-secondary); }
+
+  /* timeline */
+  .timeline-bar {
+    display: flex; gap: 2px; margin: 20px 0 8px; border-radius: 6px; overflow: hidden; height: 32px;
+  }
+  .timeline-bar .seg {
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; padding: 0 6px;
+  }
+
+  /* tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
+  th { text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--stroke); color: var(--text-secondary); font-weight: 600; background: var(--bg-elevated); }
+  td { padding: 7px 12px; border-bottom: 1px solid var(--stroke-light); color: var(--text-secondary); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
+
+  /* cards */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--stroke);
+    border-radius: 10px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--stroke-light);
+    font-weight: 700; font-size: 14px;
+  }
+  .card-header .badge {
+    font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 10px;
+  }
+  .card-body { padding: 16px; }
+
+  /* section cards — colored left border */
+  .section-card { border-left: 4px solid; }
+  .section-card.s1 { border-left-color: #3b82f6; }
+  .section-card.s2 { border-left-color: #8b5cf6; }
+  .section-card.s3 { border-left-color: #10b981; }
+  .section-card.s4 { border-left-color: #f59e0b; }
+  .section-card.s5 { border-left-color: #ef4444; }
+  .section-card.s6 { border-left-color: #6366f1; }
+  .section-card.s7 { border-left-color: #0891b2; }
+  .section-card.s8 { border-left-color: #d946ef; }
+
+  .badge-time { background: var(--accent-bg); color: var(--accent-text); }
+  .badge-chars { background: var(--bg-elevated); color: var(--text-tertiary); }
+
+  /* purpose box */
+  .purpose {
+    background: var(--accent-bg); border-radius: 6px; padding: 10px 14px;
+    font-size: 13px; color: var(--accent-text); font-weight: 600; margin-bottom: 12px;
+  }
+
+  /* quote / note */
+  .note {
+    background: var(--bg-elevated); border-radius: 6px; padding: 10px 14px;
+    font-size: 12px; color: var(--text-tertiary); margin-top: 10px; line-height: 1.6;
+  }
+  .note strong { color: var(--text-secondary); }
+
+  /* script lines */
+  .script { font-size: 13px; color: var(--text-secondary); line-height: 1.8; }
+  .script li { margin-bottom: 6px; list-style: none; padding-left: 16px; position: relative; }
+  .script li::before { content: ""; position: absolute; left: 0; top: 10px; width: 5px; height: 5px; border-radius: 50%; background: var(--text-tertiary); }
+  .script .line-quote {
+    background: var(--warn-bg); border-left: 3px solid var(--warn-text);
+    padding: 6px 10px; border-radius: 0 4px 4px 0; margin: 4px 0; font-size: 13px; color: var(--warn-text);
+  }
+
+  /* pattern cards */
+  .pattern { background: var(--bg-card); border: 1px solid var(--stroke-light); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
+  .pattern .pat-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
+  .pattern .pat-body { font-size: 13px; color: var(--text-secondary); }
+  .pattern .pat-fix { font-size: 12px; color: var(--success-text); margin-top: 4px; font-weight: 600; }
+
+  /* route cards */
+  .route-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 10px 0; }
+  .route-card { border: 1px solid var(--stroke); border-radius: 8px; padding: 14px; background: var(--bg-card); }
+  .route-card .route-name { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
+  .route-card .route-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
+  /* before-after */
+  .ba-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 8px; border: 1px solid var(--stroke-light); border-radius: 8px; overflow: hidden; }
+  .ba-cell { padding: 10px 14px; font-size: 13px; }
+  .ba-cell.before { background: #fef2f2; color: #991b1b; }
+  .ba-cell.after { background: #ecfdf5; color: #065f46; }
+  .ba-label { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+  /* schedule table */
+  .schedule-table td:first-child { width: 100px; }
+
+  /* checklist */
+  .checklist { list-style: none; padding: 0; }
+  .checklist li { font-size: 13px; color: var(--text-secondary); padding: 4px 0 4px 24px; position: relative; }
+  .checklist li::before { content: "✅"; position: absolute; left: 0; top: 4px; font-size: 13px; }
+
+  /* wall cards */
+  .wall { background: var(--section-5); border: 1px solid var(--section-5-border); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
+  .wall .wall-title { font-weight: 700; font-size: 13px; color: #dc2626; margin-bottom: 4px; }
+  .wall .wall-body { font-size: 13px; color: var(--text-secondary); }
+
+  /* sim cards */
+  .sim { background: var(--section-2); border: 1px solid var(--section-2-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+  .sim .sim-title { font-weight: 700; font-size: 13px; color: #7c3aed; margin-bottom: 6px; }
+  .sim .sim-body { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+
+  /* divider */
+  .divider { border: none; border-top: 1px solid var(--stroke-light); margin: 28px 0; }
+
+  /* core message box */
+  .core-msg {
+    background: linear-gradient(135deg, #1e3a5f, #2563eb);
+    color: #fff; border-radius: 10px; padding: 20px 24px; margin: 16px 0;
+    font-size: 14px; line-height: 1.8;
+  }
+  .core-msg strong { color: #fbbf24; }
+
+  /* meta info */
+  .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 12px 0; }
+  .meta-item { background: var(--bg-card); border: 1px solid var(--stroke); border-radius: 8px; padding: 12px 16px; }
+  .meta-item .meta-label { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; }
+  .meta-item .meta-value { font-size: 14px; font-weight: 700; margin-top: 2px; }
+
+  /* connection list */
+  .conn { font-size: 12px; color: var(--accent-text); background: var(--accent-bg); border-radius: 6px; padding: 8px 12px; margin-top: 10px; line-height: 1.6; }
+  .conn strong { font-weight: 700; }
+
+  /* filming notes */
+  .filming-table td { font-size: 13px; }
+  .filming-table td:first-child { width: 140px; font-weight: 600; color: var(--accent-text); }
+
+  /* next actions */
+  .action-list { list-style: none; padding: 0; }
+  .action-list li { font-size: 13px; color: var(--text-secondary); padding: 6px 0 6px 28px; position: relative; border-bottom: 1px solid var(--stroke-light); }
+  .action-list li:last-child { border-bottom: none; }
+  .action-list li::before { content: "☐"; position: absolute; left: 4px; top: 6px; font-size: 14px; color: var(--text-tertiary); }
+</style>
+</head>
+<body>
+
+<h1>勉強会動画 プロット（v4）</h1>
+<p class="subtitle">作成日：2026-05-26 ／ 3ルート再定義＋「3つの壁」ブリッジ追加＋副業＝全ルート共通スキル化</p>
+
+<!-- ===== 前提設計 ===== -->
+<h2>前提設計</h2>
+<div class="meta-grid">
+  <div class="meta-item">
+    <div class="meta-label">動画の役割</div>
+    <div class="meta-value" style="font-size:13px;font-weight:500;line-height:1.5">メルマガ・LINEの約束を回収し、面談申込へ動かす</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">想定視聴者</div>
+    <div class="meta-value" style="font-size:13px;font-weight:500">35歳会社員・年収500万の壁・副業ゼロ</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">動画の長さ</div>
+    <div class="meta-value">47分 + 3分 ≒ 50分</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">話す速度</div>
+    <div class="meta-value">300字/分</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">視聴後のゴール</div>
+    <div class="meta-value" style="font-size:13px;font-weight:500">「自分でもできそう」＋「相談したい」→ 面談申込</div>
+  </div>
+</div>
+
+<!-- ===== 核心メッセージ ===== -->
+<h2>核心メッセージ</h2>
+<div class="core-msg">
+  AIを使って年収を上げる。やることは一つ。<br>
+  <strong>「AIを使って仕事の成果を上げる設計を作る」</strong><br><br>
+  その結果、3つの道が開ける——<br>
+  &nbsp;&nbsp;1. 会社に残る（出世＋副業で収入の柱を作る）<br>
+  &nbsp;&nbsp;2. 別の会社を探す（転職＋副業で稼ぎ方の幅が広がる）<br>
+  &nbsp;&nbsp;3. 独立する（副業スキルがそのまま本業になる）<br><br>
+  副業は特定のルートではなく、<strong>全ルート共通で身につくスキル</strong>。
+</div>
+
+<!-- ===== タイムラインバー ===== -->
+<h2>文字数・時間設計</h2>
+<div class="timeline-bar">
+  <div class="seg" style="flex:2;background:#3b82f6">① 2分</div>
+  <div class="seg" style="flex:2;background:#8b5cf6">② 2分</div>
+  <div class="seg" style="flex:5;background:#a855f7">③ 5分</div>
+  <div class="seg" style="flex:5;background:#10b981">④ 5分</div>
+  <div class="seg" style="flex:20;background:#f59e0b">⑤ 20分</div>
+  <div class="seg" style="flex:3;background:#6366f1">⑥ 3分</div>
+  <div class="seg" style="flex:7;background:#0891b2">⑦ 7分</div>
+  <div class="seg" style="flex:3;background:#d946ef">⑧ 3分</div>
+</div>
+
+<table>
+  <thead><tr><th>#</th><th>セクション</th><th>時間</th><th>文字数</th><th>内容密度チェック</th></tr></thead>
+  <tbody>
+    <tr><td>①</td><td>あいさつ・予告</td><td>2分</td><td>600字</td><td>締切告知＋予告のみ。手短に</td></tr>
+    <tr><td>②</td><td>自己紹介</td><td>2分</td><td>600字</td><td>実績3点＋動機1文。テロップ補強</td></tr>
+    <tr><td>③</td><td>ストーリー</td><td>5分</td><td>1,500字</td><td>Google時代の気づき→独立→確信→スクール設計</td></tr>
+    <tr><td>④</td><td>問題提起</td><td>5分</td><td>1,500字</td><td>失敗パターン3つ＋原因の明示＋回避策予告＋転換</td></tr>
+    <tr><td>⑤</td><td>メソッド説明</td><td>20分</td><td>6,600字</td><td>核心メッセージ＋3ルート＋実演＋ツール＋スケジュール＋3つの壁</td></tr>
+    <tr><td>⑥</td><td>面談シミュレーション</td><td>3分</td><td>900字</td><td>3ルート×面談の進め方を実演</td></tr>
+    <tr><td>⑦</td><td>CTA・面談案内</td><td>7分</td><td>2,100字</td><td>面談＝STEP 0＋申込導線＋クロージング</td></tr>
+    <tr><td>⑧</td><td>延長CTA</td><td>3分</td><td>900字</td><td>迷っている人向け再説得</td></tr>
+    <tr><td></td><td><strong>合計</strong></td><td><strong>47分＋3分</strong></td><td><strong>14,700字</strong></td><td></td></tr>
+  </tbody>
+</table>
+
+<!-- ===== メルマガ対応表 ===== -->
+<h2>メルマガ・LINEとの訴求対応表</h2>
+<table>
+  <thead><tr><th style="width:55%">メルマガ・LINEで予告した内容</th><th>動画内で回収するセクション</th></tr></thead>
+  <tbody>
+    <tr><td>「AIを学んでいるのに年収が上がらない人には共通パターンがある」（LINE #5）</td><td>④ 失敗パターン3つとして診断</td></tr>
+    <tr><td>「やりがちな失敗パターン3つとその回避策」（メルマガ #3）</td><td>④ パターン1〜3＋各回避策の予告 → ⑤で回収</td></tr>
+    <tr><td>「昨日と同じ明日を繰り返す人の共通点」（メルマガ #4 件名）</td><td>④ 行動設計がない、という診断</td></tr>
+    <tr><td>「何を、どの順番でやるか」を一緒に設計する（LINE #3）</td><td>⑤ 核心メッセージ＋3ルート</td></tr>
+    <tr><td>「プログラミング不要・難しい勉強ゼロ」（LINE #3・#5）</td><td>⑤-3 AIで仕事の成果を上げる実演</td></tr>
+    <tr><td>「今すぐ使えるAIツールの選び方と使い分け」（メルマガ #3）</td><td>⑤-3 AIツールの選び方（文章系・画像系・動画系）</td></tr>
+    <tr><td>「今週から動けるやることリスト」（メルマガ #4・#7）</td><td>⑤-3 やることリスト（3ステップ画面表示）</td></tr>
+    <tr><td>「年収アップまでのスケジュール設計（週単位）」（メルマガ #3）</td><td>⑤-4b 週単位のモデルケース</td></tr>
+    <tr><td>「行動が変わる・収入につながる」（メルマガ #4 設計メモ）</td><td>⑤-4 Before→After の提示</td></tr>
+    <tr><td>「少し昔の話をしますね」（LINE #4 ルナのストーリー）</td><td>③ スクール誕生の理由</td></tr>
+    <tr><td>「現役でSNS・YouTube・広告を動かしているチーム」（商品設計）</td><td>⑦-2 現役講師＋現場参加の機会</td></tr>
+    <tr><td>「見てくれた方だけにスクールの詳細をご案内」（LINE #5・#6）</td><td>⑦ CTA：面談案内</td></tr>
+    <tr><td>「売り込まれそうで怖い」という不安（メルマガ #6）</td><td>⑦ CTA冒頭：「売りません」の宣言</td></tr>
+  </tbody>
+</table>
+
+<hr class="divider">
+
+<!-- ===== 動画構成 ===== -->
+<h2>動画構成（全8セクション）</h2>
+
+<!-- ① あいさつ -->
+<div class="card section-card s1">
+  <div class="card-header">
+    ① あいさつ・予告（0:00〜2:00）
+    <span><span class="badge badge-time">2分</span> <span class="badge badge-chars">600字</span></span>
+  </div>
+  <div class="card-body">
+    <div class="purpose">目的：「最後まで見る理由」を先出しして離脱を防ぐ</div>
+    <h4>セリフ構成イメージ</h4>
+    <ul class="script">
+      <li>この動画を受け取ってくれてありがとうございます</li>
+      <li>このページと動画は<strong>3日間限定</strong>。1度しか表示されないので注意深くご覧ください</li>
+      <li>この動画を最後まで見てくれた方に、<strong>もう一つの特典</strong>をご案内します（→ 面談申込チケット）</li>
+      <li>「この特典は動画の最後でお話しします。ぜひ最後まで見てください」</li>
+    </ul>
+    <div class="note"><strong>設計意図：</strong> 参考台本と同じ「先出し予告」。「最後に何かある」と知っていれば視聴完了率が上がる。</div>
+  </div>
+</div>
+
+<!-- ② 自己紹介 -->
+<div class="card section-card s2">
+  <div class="card-header">
+    ② 自己紹介（2:00〜4:00）
+    <span><span class="badge badge-time">2分</span> <span class="badge badge-chars">600字</span></span>
+  </div>
+  <div class="card-body">
+    <div class="purpose">目的：権威と共感を同時に作る。「この人の話なら聞く価値がある」</div>
+    <h4>実績の提示（画面テロップ＋口頭）</h4>
+    <ul class="script">
+      <li>元Google社員</li>
+      <li>YouTubeチャンネル 金の盾・銀の盾取得（チャンネル名・実数を出す）</li>
+      <li>独立後、グループ年商10億のチームでAI×マーケティングを現在も現役で運用中</li>
+    </ul>
+    <h4>なぜ活動しているかの動機（1文）</h4>
+    <ul class="script">
+      <li>
+        <div class="line-quote">「Googleにいたとき、AIを使いこなして成果を出す人と、全然使えないまま終わる人、両方を見てきました。その差が何か——それが今日の話の核心です」</div>
+      </li>
+    </ul>
+    <div class="conn"><strong>LINEとの接続：</strong> LINE #4「ルナのストーリー」の冒頭と同じ入り方。読者が「続きだ」と感じる。</div>
+  </div>
+</div>
+
+<!-- ③ ストーリー -->
+<div class="card section-card s3">
+  <div class="card-header">
+    ③ ストーリー（4:00〜9:00）
+    <span><span class="badge badge-time">5分</span> <span class="badge badge-chars">1,500字</span></span>
+  </div>
+  <div class="card-body">
+    <div class="purpose">目的：スクールの設計思想が生まれた背景を体験談で語り、⑤メソッド説明への伏線を張る</div>
+
+    <h4>Google時代の観察（気づきフェーズ）</h4>
+    <ul class="script">
+      <li><div class="line-quote">「Googleには優秀な人しかいないと思うでしょう？でも、AIの使い方には明確な差がありました」</div></li>
+      <li><strong>使えていない人：</strong>AIの新機能が出るたびに飛びつく。勉強会にも出る。でも仕事のアウトプットが変わらない</li>
+      <li><strong>使えている人：</strong>AIの新機能なんてほとんど追ってない。でも仕事に必要な場面でだけ、ピンポイントでAIを使っていた</li>
+      <li><div class="line-quote">「この差を見ていて気づいたんです。AIが使える・使えないは"知識の量"じゃない。"何のために使うか"が決まっているかどうかだって」</div></li>
+    </ul>
+
+    <h4>独立後の体験（確信フェーズ）</h4>
+    <ul class="script">
+      <li>独立してAI×マーケのチームを作った。やったことはシンプルで、「YouTube・SNS・広告」というゴールに対してAIの使い方を逆算して設計した</li>
+      <li>チームは成長し、グループ年商10億になった</li>
+      <li>一方で、「AIを勉強したけど何も変わらない」という相談がどんどん来るようになった</li>
+      <li>足りないのは、AIの知識ではなく<strong>"どの仕事に・どう当てるか"の設計</strong>だと確信した</li>
+    </ul>
+
+    <h4>着地（スクール設計への接続）</h4>
+    <ul class="script">
+      <li><div class="line-quote">「AIを学ぶ場所ではなく、"あなたの目的に合ったAIの使い方を一緒に設計する場所"を作ろう。そう思ったのがきっかけです」</div></li>
+    </ul>
+    <div class="note"><strong>設計意図：</strong> ストーリーの着地点が⑤メソッド説明（目的から逆算するAI活用＋3ルート設計）に直結する。</div>
+  </div>
+</div>
+
+<!-- ④ 問題提起 -->
+<div class="card section-card s4">
+  <div class="card-header">
+    ④ 問題提起（9:00〜14:00）
+    <span><span class="badge badge-time">5分</span> <span class="badge badge-chars">1,500字</span></span>
+  </div>
+  <div class="card-body">
+    <div class="purpose">目的：視聴者の心の声を代弁して「自分のための動画だ」を確定させる</div>
+
+    <h4>3つの失敗パターン（メルマガ #3・#5 と完全対応）</h4>
+
+    <div class="pattern">
+      <div class="pat-title">パターン1：「何から始めればいいかわからない」</div>
+      <div class="pat-body">ツールは触った。でも"自分の仕事のどこに使うか"がないから止まる</div>
+      <div class="pat-fix">→ 回避策：目的から逆算する設計を最初に作る（⑤で詳しく話す）</div>
+    </div>
+    <div class="pattern">
+      <div class="pat-title">パターン2：「やる気になるけど、次の日には忘れてる」</div>
+      <div class="pat-body">"何をやるか"は決まっても、"いつ・どの順番で"が決まっていないから続かない</div>
+      <div class="pat-fix">→ 回避策：週単位のスケジュールに落とし込む（⑤で実例を見せる）</div>
+    </div>
+    <div class="pattern">
+      <div class="pat-title">パターン3：「稼げている人と自分、何が違うのか正直わからない」</div>
+      <div class="pat-body">差は才能やセンスではなく、"行動の設計があるかないか"だけ</div>
+      <div class="pat-fix">→ 回避策：自分に合ったルートを選んで、それに沿って動く（⑤で3つの道を紹介する）</div>
+    </div>
+
+    <h4>「それは全部、これが原因です」</h4>
+    <ul class="script">
+      <li><strong>"行動の設計"がないから起きること。</strong>AIのスキルの問題ではない</li>
+      <li><div class="line-quote">「さっき話した、Googleで"使えなかった人たち"と全く同じ状態です」（③ストーリーを回収）</div></li>
+    </ul>
+
+    <h4>転換</h4>
+    <ul class="script">
+      <li><div class="line-quote">「逆に言えば、設計が決まれば動ける。今日はその設計の話をします」</div></li>
+    </ul>
+  </div>
+</div>
+
+<!-- ⑤ メソッド説明 -->
+<div class="card section-card s5">
+  <div class="card-header">
+    ⑤ メソッド説明（14:00〜34:00）
+    <span><span class="badge badge-time">20分</span> <span class="badge badge-chars">6,600字</span></span>
+  </div>
+  <div class="card-body">
+    <div class="purpose">目的：「この方法は本物だ」「自分にもできる」を論理と実演で証明し、「でも一人では設計できない」→ 面談へのブリッジを作る</div>
+
+    <!-- 5-1 -->
+    <h3>5-1. 核心メッセージ（14:00〜17:00 ／ 900字）</h3>
+    <ul class="script">
+      <li><div class="line-quote">「AIを使って年収を上げる。やることは一つです」</div></li>
+      <li><div class="line-quote">「"AIを使って仕事の成果を上げる設計を作る"。これだけ」</div></li>
+      <li>「他のスクールは"AIを学ぶこと"が目的。ここは"あなたの年収を上げること"が目的。AIはそのための手段です」</li>
+      <li>「この設計ができると、3つの道が勝手に開きます」</li>
+    </ul>
+    <div class="conn"><strong>商品設計との接続：</strong> 差別化軸④「目的から逆算したAI活用」</div>
+
+    <!-- 5-2 -->
+    <h3>5-2. 3つの道（17:00〜20:00 ／ 900字）</h3>
+    <p class="script" style="margin-bottom:10px">「AIで仕事の成果を上げられるようになると、選択肢が生まれます」</p>
+    <div class="route-grid">
+      <div class="route-card">
+        <div class="route-name">① 会社に残る</div>
+        <div class="route-desc">AIで本業の成果を上げて出世する。同時に、副業で収入の柱も作る。<br>「今の会社にいながら、年収も上がるし副収入もできる。一番リスクが低い道です」</div>
+      </div>
+      <div class="route-card">
+        <div class="route-name">② 別の会社を探す</div>
+        <div class="route-desc">AI活用の実績を武器に、より条件のいい会社に転職する。副業スキルがあるから稼ぎ方の幅が広がる。<br>「転職市場で"AIでこういう成果を出しました"と言える人は、今ほとんどいません」</div>
+      </div>
+      <div class="route-card">
+        <div class="route-name">③ 独立する</div>
+        <div class="route-desc">AIスキルで仕事を受注してフリーランスになる。副業で身につけたスキルがそのまま本業になる。<br>「いきなり独立じゃない。副業で実績を作ってから独立するので、リスクが小さい」</div>
+      </div>
+    </div>
+    <ul class="script">
+      <li>「3つとも、ベースになるのは同じ。AIで仕事の成果を上げる力と、副業で稼ぐスキル」</li>
+      <li>「どの道が自分に合っているかは、今の段階ではわからなくて当然です。それを一緒に決めるところから始めます」</li>
+    </ul>
+    <div class="conn"><strong>商品設計との接続：</strong> 差別化軸③「個別設計（3ルート）」</div>
+
+    <!-- 5-3 -->
+    <h3>5-3. STEP 1の実演：AIで仕事の成果を上げる（20:00〜28:00 ／ 2,400字）</h3>
+    <p class="script" style="margin-bottom:8px">STEP 0（面談）で方向性を仮決めした後、STEP 1は全員共通——「AIを使って、今の仕事の成果を上げる」。</p>
+
+    <h4>なぜここから始めるか</h4>
+    <ul class="script">
+      <li>「会社に残るなら、本業の成果が上がらないと出世できない」</li>
+      <li>「転職するなら、"AIでこういう成果を出しました"と言えないと始まらない」</li>
+      <li>「独立するなら、"AIで何ができるか"を証明できないと仕事が取れない」</li>
+      <li><div class="line-quote">「つまり、どの道でも"AIを使って成果を出せる"が最初のピースなんです」</div></li>
+    </ul>
+
+    <h4>実演（画面収録）</h4>
+    <ul class="script">
+      <li>AIを使って資料やレポートのクオリティを上げるデモ（プロンプト設計→出力→仕上げ）</li>
+      <li>AIを使って画像・動画を生成するデモ（テキスト入力→画像/映像が出る）</li>
+      <li><div class="line-quote">「難しい勉強ゼロ・プログラミングゼロ。やっていることは"指示を出して、仕上げる"だけです」</div></li>
+      <li>「この2つ（資料＋画像/動画）ができるだけで、副業の案件は取れるし、本業でも周りと差がつきます」</li>
+    </ul>
+
+    <h4>AIツールの選び方と使い分け（テロップ＋口頭）</h4>
+    <ul class="script">
+      <li>「AIツールはたくさんあるけど、今の段階で覚えるべきものは3つだけです」</li>
+    </ul>
+    <table>
+      <thead><tr><th>カテゴリ</th><th>ツール</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td>文章系</td><td>ChatGPT or Claude</td><td>資料・メール・企画書・リサーチの効率化</td></tr>
+        <tr><td>画像系</td><td>Midjourney or Canva AI</td><td>SNS投稿・プレゼン・サムネイル制作</td></tr>
+        <tr><td>動画系</td><td>（ツール名）</td><td>ショート動画・プロモーション映像</td></tr>
+      </tbody>
+    </table>
+    <ul class="script">
+      <li>「全部使う必要はない。あなたの仕事内容と目的に合わせて、最初に使う1つを決めます」</li>
+    </ul>
+
+    <h4>今週から動けるやることリスト</h4>
+    <ul class="checklist">
+      <li>自分の仕事で「時間がかかっている作業」を3つ書き出す</li>
+      <li>その中で「AIに置き換えられそうなもの」を1つ選ぶ</li>
+      <li>今日紹介したツールで1回試してみる</li>
+    </ul>
+    <ul class="script" style="margin-top:8px">
+      <li><div class="line-quote">「——ただし、正直に言います。このリストは"誰にでも当てはまる汎用版"です」</div></li>
+      <li>「"あなたの仕事のどの場面に・どのツールを・どう当てるか"——ここは人によって全然違う。だから汎用版のまま進めると、ほとんどの人が2〜3週間で止まります」</li>
+    </ul>
+    <div class="conn"><strong>LINEとの接続：</strong> LINE #3「プログラミングも難しい勉強も一切なし」の約束を映像で回収<br><strong>メルマガとの接続：</strong> メルマガ #3「AIツールの選び方と使い分け」＋メルマガ #4「今週から動けるやることリスト」の約束を回収</div>
+
+    <!-- 5-4 -->
+    <h3>5-4. Before → After（28:00〜30:00 ／ 900字）</h3>
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--text-secondary)">① 会社に残るルート</div>
+    <div class="ba-row">
+      <div class="ba-cell before"><div class="ba-label">Before</div>年収500万の壁。頑張っているのに評価が上がらない。副収入ゼロ</div>
+      <div class="ba-cell after"><div class="ba-label">After</div>AIで仕事の速度と質が上がり昇進・昇給。副業でも月10万の柱ができている</div>
+    </div>
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--text-secondary)">② 別の会社を探すルート</div>
+    <div class="ba-row">
+      <div class="ba-cell before"><div class="ba-label">Before</div>今の会社に将来性を感じない。でもスキルがない</div>
+      <div class="ba-cell after"><div class="ba-label">After</div>AI活用の実績を武器にキャリアチェンジ成功。副業スキルで稼ぎの幅が広い</div>
+    </div>
+    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--text-secondary)">③ 独立するルート</div>
+    <div class="ba-row">
+      <div class="ba-cell before"><div class="ba-label">Before</div>会社に依存した働き方。自分のスキルで稼げる自信がない</div>
+      <div class="ba-cell after"><div class="ba-label">After</div>副業で実績を作ってからフリーランスに移行。場所を選ばず仕事を選べる状態</div>
+    </div>
+    <ul class="script" style="margin-top:8px">
+      <li>「3つとも、まず大きいことはしない。小さな成功体験から始めて、気づいたら次のステージにいる——そういう設計です」</li>
+    </ul>
+
+    <!-- 5-4b -->
+    <h3>5-4b. 週単位のスケジュール設計（30:00〜32:00 ／ 600字）</h3>
+    <ul class="script" style="margin-bottom:8px">
+      <li><div class="line-quote">「ここまでで"何をやるか"は見えてきたと思います。じゃあ次は"いつやるか"——これがないと、さっきの失敗パターン2に戻ります」</div></li>
+    </ul>
+    <table class="schedule-table">
+      <thead><tr><th>週</th><th>やること</th><th>目安時間</th></tr></thead>
+      <tbody>
+        <tr><td>1週目</td><td>AIツールを1つ選んで、今の仕事で試す</td><td>1日30分 × 5日</td></tr>
+        <tr><td>2〜3週目</td><td>成果が出た作業をルーティン化。副業案件をリサーチ</td><td>1日30分 × 5日</td></tr>
+        <tr><td>4週目</td><td>副業案件に1つ応募 or 社内で成果を報告</td><td>まとめて2時間</td></tr>
+        <tr><td>2ヶ月目〜</td><td>ルートに合わせて具体的に動く（面談で一緒に設計）</td><td>週3〜5時間</td></tr>
+      </tbody>
+    </table>
+    <ul class="script" style="margin-top:8px">
+      <li>「1日30分。通勤時間や昼休みでもできる量です」</li>
+      <li><div class="line-quote">「——でも、これも汎用版です。営業職の人と事務職の人では、AIを当てる場所が全然違う」</div></li>
+      <li>「やることはわかった。でも"自分の場合はどうすればいいか"がわからない——ここが、一人でやる限界です」</li>
+    </ul>
+    <div class="conn"><strong>メルマガとの接続：</strong> メルマガ #3「年収アップに到達するまでのスケジュール設計（週単位で解説）」の約束を回収</div>
+
+    <!-- 5-5 -->
+    <h3>5-5. 「でも、一人では設計できない」— 3つの壁（32:00〜34:00 ／ 900字）</h3>
+    <ul class="script" style="margin-bottom:10px">
+      <li>「ここまでで、"何をやればいいか"は全部お伝えしました。約束通りです」</li>
+      <li><div class="line-quote">「でも——ここからが一番大事な話です。"わかること"と"できること"は違います」</div></li>
+    </ul>
+
+    <div class="wall">
+      <div class="wall-title">壁1：自分に合ったルートがわからない</div>
+      <div class="wall-body">「会社に残る？転職する？独立する？——今の段階で正解がわかる人はほぼいません。あなたの状況・スキル・やりたいことを聞いて、一緒に決めるところから始める必要があります」</div>
+    </div>
+    <div class="wall">
+      <div class="wall-title">壁2：AIの使い方は知っていても、自分の仕事のどこに当てるか設計できない</div>
+      <div class="wall-body">「AIの勉強はYouTubeでもできる。でも"あなたの仕事の、どの場面に、どのツールを当てるか"は、あなたの仕事を知らないと設計できない。だから個別にやる意味がある」</div>
+    </div>
+    <div class="wall">
+      <div class="wall-title">壁3：一人だと続かない</div>
+      <div class="wall-body">「一人で始めて3ヶ月続く人は、正直ほとんどいません。"今週これをやる"が決まっていて、誰かに報告する場所がある。それだけで続きます」</div>
+    </div>
+
+    <ul class="script" style="margin-top:10px">
+      <li><div class="line-quote">「だから、一緒に設計する場所を作りました」</div></li>
+    </ul>
+    <div class="note"><strong>設計意図：</strong> ここが⑦CTA（面談案内）への直結ブリッジ。「面談 = STEP 0（方向性の仮決め）」という定義を先にここで作る。</div>
+  </div>
+</div>
+
+<!-- ⑥ 面談シミュレーション -->
+<div class="card section-card s6">
+  <div class="card-header">
+    ⑥ 面談シミュレーション（34:00〜37:00）
+    <span><span class="badge badge-time">3分</span> <span class="badge badge-chars">900字</span></span>
+  </div>
+  <div class="card-body">
+    <div class="purpose">目的：面談の進め方を実演して見せることで、面談の怖さを消す</div>
+
+    <div class="sim">
+      <div class="sim-title">シミュレーション① 会社に残るルート（35歳・メーカー営業）</div>
+      <div class="sim-body">
+        「例えばあなたが営業職だとします。面談ではまずこう聞きます——"今の仕事で一番時間がかかっている作業は何ですか？"」<br>
+        「"提案資料の作成に毎回3時間かかる"と言われたら、AIで資料のドラフトを作る方法を提案します。これがSTEP 1の入口」<br>
+        「本業の成果が上がれば出世の材料になるし、同じスキルで副業もできる。このプランを一緒に作ります」
+      </div>
+    </div>
+    <div class="sim">
+      <div class="sim-title">シミュレーション② 別の会社を探すルート（28歳・事務職）</div>
+      <div class="sim-body">
+        「"今の会社に将来性を感じない"と言われたら、まず聞くのは"転職先で何ができる人になりたいか"」<br>
+        「"AIを使ってマーケティングができる人"なら、まず今の仕事でAIを使った実績を3ヶ月で作る。それが職務経歴書に書ける武器になる」
+      </div>
+    </div>
+    <div class="sim">
+      <div class="sim-title">シミュレーション③ 独立するルート（34歳・Web制作）</div>
+      <div class="sim-body">
+        「"いつか独立したい"と言われたら、"いきなり独立"は絶対に勧めません」<br>
+        「まず副業でAI画像・動画制作の案件を取る。月5〜10万の実績ができてから独立を考える。このステップを一緒に設計します」
+      </div>
+    </div>
+
+    <ul class="script" style="margin-top:8px">
+      <li><div class="line-quote">「——こんな感じです。面談は、あなたの状況に合わせて、"最初の1ヶ月で何をやるか"を一緒に決める場所です」</div></li>
+    </ul>
+    <div class="note"><strong>設計意図：</strong> 架空の成功事例ではなく、講師が面談でどう話すかをリアルに見せる。実際の受講生事例が揃った段階で、事例パートを追加 or 差し替えも可能。</div>
+  </div>
+</div>
+
+<!-- ⑦ CTA・面談案内 -->
+<div class="card section-card s7">
+  <div class="card-header">
+    ⑦ スクール・面談のご案内（37:00〜44:00）
+    <span><span class="badge badge-time">7分</span> <span class="badge badge-chars">2,100字</span></span>
+  </div>
+  <div class="card-body">
+    <div class="purpose">目的：面談＝「STEP 0：方向性の仮決め」として位置づけ、申し込みのハードルを下げる</div>
+
+    <h4>7-1. 「売り込みません」の宣言</h4>
+    <ul class="script">
+      <li><div class="line-quote">「今日は何も買わせません」</div></li>
+      <li>「私が今日お伝えしたいのは、まず話しましょう、ということだけです」</li>
+      <li>「気になることを聞いてもらう場所が面談です。合わなければそれだけでいい」</li>
+    </ul>
+    <div class="conn"><strong>メルマガとの接続：</strong> メルマガ #6「売り込まれそうで怖い…と思っている方へ」の回収</div>
+
+    <h4>7-2. 面談 ＝ STEP 0（方向性の仮決め）</h4>
+    <ul class="script">
+      <li>「さっき話した"3つの壁"、覚えていますか？」</li>
+      <li>「この3つを解決する最初の一歩が、面談——つまりSTEP 0です」</li>
+      <li>「面談では、あなたの状況を聞いて、3つの道のどれが合っていそうかを一緒に"仮決め"します」</li>
+      <li><div class="line-quote">「"仮決め"でいいんです。STEP 1でAIを実際に使ってみれば、自分に合う道がもっとはっきり見えてきます」</div></li>
+      <li>「面談であなたの話を聞くのは、今もYouTube・SNS・広告をAIで動かしている現役の講師です」</li>
+      <li>「あなたの目的に合わせて設計するので、全員同じカリキュラムを渡されることもない」</li>
+      <li>「実力がついた人には現在進行形のプロジェクトに参加してもらう機会もあります」</li>
+    </ul>
+    <div class="note"><strong>設計意図：</strong> ⑤-5「3つの壁」で作った問題意識をここで回収。面談＝STEP 0の位置づけにより「決めきれないプレッシャー」を消す。<br><strong>商品設計との接続：</strong> 差別化軸①②③⑤⑥をこの文脈に溶かし込み</div>
+
+    <h4>7-3. 面談で話す内容の明示</h4>
+    <ul class="script">
+      <li>「具体的に何を話すか、先にお伝えします」</li>
+    </ul>
+    <table>
+      <tbody>
+        <tr><td>1</td><td>あなたの現状と目標のヒアリング</td></tr>
+        <tr><td>2</td><td>3つの道のうち、どれが合っていそうかの仮提案</td></tr>
+        <tr><td>3</td><td>STEP 1で具体的に何から始めるかのアクションプラン</td></tr>
+        <tr><td>4</td><td>価格・サポート内容・成功事例——聞きたいことに全部答える</td></tr>
+      </tbody>
+    </table>
+
+    <h4>7-3b. 面談で手に入るもの（成果物の明示）</h4>
+    <ul class="script">
+      <li>「そして、面談が終わったあと、一つお渡しするものがあります」</li>
+      <li><div class="line-quote">「"あなた専用のアクションプランシート"です」（画面でサンプルを見せる）</div></li>
+      <li>「さっき動画で見せたやることリストとスケジュール、覚えていますか？あれの"あなた専用版"です」</li>
+      <li>「入会するかどうかは、このシートを見てから決めてもらえばいい。シートは入会しなくても持ち帰れます」</li>
+      <li><strong>「つまり、面談に来るだけで"自分の場合は何をすればいいか"が明確になる。損することは何もありません」</strong></li>
+    </ul>
+
+    <h4>7-4. 無料で案内する理由を正直に言う</h4>
+    <ul class="script">
+      <li>「なぜ面談が無料かというと、まず話してみないとあなたに合うかどうかわからないからです」</li>
+      <li>「どの道が合うかもまだ決まっていない段階で、お金の話をしても意味がない」</li>
+      <li>「だから面談＝STEP 0では、あなたの状況を聞いて、合いそうなルートを仮決めする。それだけです」</li>
+    </ul>
+    <div class="conn"><strong>商品設計との接続：</strong> 差別化軸⑦「透明性（面談で開示）」と整合</div>
+
+    <h4>7-5. 申し込み導線</h4>
+    <ul class="script">
+      <li>申し込み方法を画面で見せる（LPへの導線を画面収録）</li>
+      <li>「このページの下のボタンから申し込めます。30分・無料・オンラインです」</li>
+      <li>「日程は〇月〇日まで」</li>
+    </ul>
+
+    <h4>7-6. クロージング</h4>
+    <ul class="script">
+      <li><div class="line-quote">「行動が遅い人ほど、半年後に同じことを検索しています」（メルマガ #7 件名と接続）</div></li>
+      <li>「迷っている間に、先に動いた人がどんどん結果を出していきます」</li>
+      <li>「まず話だけでも。待っています」で静かに締める</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ⑧ 延長CTA -->
+<div class="card section-card s8">
+  <div class="card-header">
+    ⑧ エンド後・延長CTA（44:00〜47:00）
+    <span><span class="badge badge-time">3分</span> <span class="badge badge-chars">900字</span></span>
+  </div>
+  <div class="card-body">
+    <div class="purpose">目的：エンド画像を見てもまだ迷っている人を拾う</div>
+    <ul class="script">
+      <li>エンド画像を10秒表示（「個別面談はこの動画下のボタンから」）</li>
+      <li>「まだ迷っていますか？少しだけ追加でお話しします」</li>
+      <li>「今のままAIの情報を見続けて、半年後どうなっているかを想像してみてください」</li>
+      <li>「AIは変化が速い。去年使えた方法が今年は通用しないことが普通に起きています」</li>
+      <li><div class="line-quote">「今この瞬間に動いた人だけが、次のステージに行ける。それだけです」</div></li>
+      <li>「動画下のボタンから今すぐ申し込んでください。〇月〇日で締め切ります」</li>
+      <li>「それでは面談でお会いしましょう」</li>
+    </ul>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ===== 撮影・編集の留意点 ===== -->
+<h2>撮影・編集の留意点</h2>
+<table class="filming-table">
+  <tbody>
+    <tr><td>トーン</td><td>メルマガ・LINEと同じ「ルナ」のキャラクター。馴れ馴れしすぎず、親しみやすく</td></tr>
+    <tr><td>実績画像</td><td>②自己紹介で画面テロップ＋口頭で提示。金の盾・銀の盾は映像で見せる</td></tr>
+    <tr><td>実演シーン</td><td>⑤-3 で2種類の実演（資料作成＋画像/動画生成）を画面収録。「誰でもできる」の実感が鍵</td></tr>
+    <tr><td>面談シミュレーション</td><td>⑥で3ルートの面談の進め方を実演。講師が一人語りで見せる</td></tr>
+    <tr><td>アクションプランシート</td><td>⑦-3bでサンプルを画面表示。「これが面談で手に入るもの」を映像で見せる</td></tr>
+    <tr><td>申し込み導線</td><td>⑦でLPへの導線を画面収録で見せる</td></tr>
+    <tr><td>エンド画像</td><td>「個別面談はこの動画下のボタンから」を10秒表示。その後⑧延長CTAに入る</td></tr>
+    <tr><td>長さ</td><td>本編47分＋延長3分＝約50分。⑤メソッド説明（20分）が核なので削らない</td></tr>
+  </tbody>
+</table>
+
+<hr class="divider">
+
+<!-- ===== 次のアクション ===== -->
+<h2>次のアクション</h2>
+<ul class="action-list">
+  <li>このプロットで方向性を確認</li>
+  <li>③ストーリーのエピソードを肉付け（具体的なセリフレベルで）</li>
+  <li>⑤-3 実演シーン：使用ツール・画面構成を決める</li>
+  <li>⑦-3b アクションプランシートのサンプルを作成（面談で画面表示する用）</li>
+  <li>⑥面談シミュレーション：実際の受講生事例が揃ったら事例パート追加も検討</li>
+  <li>台本の詳細作成（各セクションを文章に起こす）</li>
+  <li>LP制作に入る（このプロットをベースにコピーを組む）</li>
+</ul>
+
+</body>
+</html>
