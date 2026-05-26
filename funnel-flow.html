@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ファネル全体設計</title>
+<style>
+  :root {
+    --bg: #1e1e1e;
+    --bg-card: #252526;
+    --bg-elevated: #2d2d2d;
+    --text-primary: #cccccc;
+    --text-secondary: #999999;
+    --text-tertiary: #666666;
+    --stroke: #3e3e3e;
+    --stroke-light: #2e2e2e;
+    --accent: #4a9eff;
+    --accent-bg: #264f78;
+    --accent-on: #ffffff;
+    --success: #2ea04366;
+    --success-text: #4ec96b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 32px 24px;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  h2 { font-size: 18px; font-weight: 600; margin-top: 32px; margin-bottom: 12px; }
+  h3 { font-size: 15px; font-weight: 600; margin-top: 24px; margin-bottom: 8px; color: var(--text-secondary); }
+  .subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 20px; }
+  .dag-wrap { overflow-x: auto; margin: 16px 0; }
+  .divider { border: none; border-top: 1px solid var(--stroke-light); margin: 24px 0; }
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--stroke);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--stroke-light);
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .card-header .trailing { font-size: 12px; color: var(--text-secondary); font-weight: 400; }
+  .card-body { padding: 16px; }
+  .label { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+  .label-accent { font-weight: 600; font-size: 13px; margin-bottom: 4px; color: var(--accent); }
+  .text-sm { font-size: 13px; color: var(--text-secondary); }
+  .text-body { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+  .pill {
+    display: inline-block;
+    font-size: 11px;
+    padding: 1px 8px;
+    border-radius: 10px;
+    background: var(--success);
+    color: var(--success-text);
+    font-weight: 600;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .section-gap { margin-top: 12px; }
+  .item-list { list-style: none; padding: 0; }
+  .item-list li { font-size: 13px; color: var(--text-secondary); padding: 2px 0; padding-left: 12px; position: relative; }
+  .item-list li::before { content: ""; position: absolute; left: 0; top: 10px; width: 4px; height: 4px; border-radius: 50%; background: var(--text-tertiary); }
+  details { margin-top: 8px; }
+  summary {
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+    padding: 4px 0;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  summary::before { content: "▸"; font-size: 11px; color: var(--text-tertiary); transition: transform 0.15s; }
+  details[open] summary::before { transform: rotate(90deg); }
+  summary::-webkit-details-marker { display: none; }
+  .details-body { padding: 4px 0 4px 16px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--stroke); color: var(--text-secondary); font-weight: 600; }
+  td { padding: 6px 12px; border-bottom: 1px solid var(--stroke-light); color: var(--text-secondary); }
+  tr:last-child td { border-bottom: none; }
+  .consult-step { margin-bottom: 10px; }
+  .consult-step .step-title { font-weight: 600; font-size: 13px; }
+  .consult-step .step-title.accent { color: var(--accent); }
+  .consult-step .step-detail { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .design-note { background: var(--bg-elevated); border-radius: 6px; padding: 12px 16px; margin-top: 12px; }
+  .divider-inner { border: none; border-top: 1px solid var(--stroke-light); margin: 12px 0; }
+</style>
+</head>
+<body>
+
+<h1>ファネル全体設計</h1>
+<p class="subtitle">メルマガ/LINE → 勉強会動画 → 個別相談会 → スクール入会の流れ。各ステージの役割と、出す情報/出さない情報の設計。</p>
+
+<!-- DAG Flow -->
+<div class="dag-wrap">
+<svg width="1200" height="88" viewBox="0 0 1200 88">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3e3e3e"/>
+    </marker>
+  </defs>
+  <!-- edges -->
+  <line x1="136" y1="44" x2="168" y2="44" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="304" y1="44" x2="336" y2="44" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="472" y1="44" x2="504" y2="44" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="648" y1="44" x2="680" y2="44" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="816" y1="44" x2="848" y2="44" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="984" y1="44" x2="1016" y2="44" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
+  <!-- nodes -->
+  <rect x="16" y="16" width="120" height="56" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
+  <text x="76" y="38" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">Phase 1</text>
+  <text x="76" y="56" text-anchor="middle" fill="#999999" font-size="11">信頼構築</text>
+
+  <rect x="168" y="16" width="136" height="56" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
+  <text x="236" y="38" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">Phase 2</text>
+  <text x="236" y="56" text-anchor="middle" fill="#999999" font-size="11">期待醸成</text>
+
+  <rect x="336" y="16" width="136" height="56" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
+  <text x="404" y="38" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">Phase 3</text>
+  <text x="404" y="56" text-anchor="middle" fill="#999999" font-size="11">ローンチ</text>
+
+  <rect x="504" y="16" width="144" height="56" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
+  <text x="576" y="38" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">Phase 4</text>
+  <text x="576" y="56" text-anchor="middle" fill="#999999" font-size="11">クロージング</text>
+
+  <rect x="680" y="16" width="136" height="56" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
+  <text x="748" y="38" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">勉強会動画</text>
+  <text x="748" y="56" text-anchor="middle" fill="#999999" font-size="11">50分</text>
+
+  <rect x="848" y="16" width="136" height="56" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
+  <text x="916" y="38" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">個別相談会</text>
+  <text x="916" y="56" text-anchor="middle" fill="#999999" font-size="11">STEP 0</text>
+
+  <rect x="1016" y="16" width="136" height="56" rx="8" fill="#4a9eff" stroke="#4a9eff"/>
+  <text x="1084" y="38" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600">スクール</text>
+  <text x="1084" y="56" text-anchor="middle" fill="#ffffffcc" font-size="11">STEP 1-3</text>
+</svg>
+</div>
+
+<hr class="divider">
+
+<h2>各ステージの詳細</h2>
+
+<!-- ===== MAIL/LINE ===== -->
+<h3>メルマガ / LINE（16通: メール8通 + LINE8通）</h3>
+
+<!-- Phase 1 -->
+<div class="card">
+  <div class="card-header">Phase 1: 信頼構築 <span class="trailing">#01-04 / 登録〜1日後</span></div>
+  <div class="card-body">
+    <div class="label">目的</div>
+    <p class="text-body">LINE→メルマガへの導線を作り、特典で「この人の情報は価値がある」を証明する。スクールの存在はまだ出さない。</p>
+    <hr class="divider-inner">
+    <div class="label">出す情報 <span class="pill">4</span></div>
+    <ul class="item-list">
+      <li>特典（プロンプト集・ルーティンなど）を配布</li>
+      <li>ルナの実績（元Google・金の盾）を自然に提示</li>
+      <li>AIで年収を上げた人のデータ・エピソード</li>
+      <li>メルマガでしか読めない深い価値提供</li>
+    </ul>
+    <details>
+      <summary>出さない情報 <span class="pill" style="background:#ffffff11;color:#999">4</span></summary>
+      <div class="details-body">
+        <ul class="item-list">
+          <li>スクールの存在（まだ出さない）</li>
+          <li>勉強会の存在（まだ出さない）</li>
+          <li>価格・カリキュラムの詳細</li>
+          <li>3つの道（ルート設計）</li>
+        </ul>
+      </div>
+    </details>
+    <hr class="divider-inner">
+    <div class="label-accent">次への接続</div>
+    <p class="text-sm">特典の価値で「この人の情報をもっと見たい」を作る。メルマガ未登録者にはLINEでフォロー。</p>
+    <div class="section-gap"></div>
+    <div class="label">心理変化</div>
+    <p class="text-sm">「登録してよかった」「この人はちゃんとしてる」</p>
+  </div>
+</div>
+
+<!-- Phase 2 -->
+<div class="card">
+  <div class="card-header">Phase 2: 期待醸成 <span class="trailing">#05-08 / 2〜3日後</span></div>
+  <div class="card-body">
+    <div class="label">目的</div>
+    <p class="text-body">勉強会の存在を予告し、「見たい」という欲求を最大化する。まだURLは出さない。</p>
+    <hr class="divider-inner">
+    <div class="label">出す情報 <span class="pill">5</span></div>
+    <ul class="item-list">
+      <li>「実は今、作っているものがある」とスクールをにおわせ</li>
+      <li>勉強会の内容を箇条書きで先出し（6項目）</li>
+      <li>ルナのストーリー（なぜスクールを作るのか）</li>
+      <li>勉強会を見た後の状態（Before/After）</li>
+      <li>「勉強会を見てくれた方だけにスクールをご案内」</li>
+    </ul>
+    <details>
+      <summary>出さない情報 <span class="pill" style="background:#ffffff11;color:#999">4</span></summary>
+      <div class="details-body">
+        <ul class="item-list">
+          <li>勉強会のURL（まだ出さない）</li>
+          <li>スクールの名前・価格・詳細</li>
+          <li>3つの道の具体的な内容</li>
+          <li>個別相談会の存在</li>
+        </ul>
+      </div>
+    </details>
+    <hr class="divider-inner">
+    <div class="label-accent">次への接続</div>
+    <p class="text-sm">「近々公開します」で2日間引っ張る。ストーリーで人間的な信頼を追加。「見てくれた方だけに」で限定感。</p>
+    <div class="section-gap"></div>
+    <div class="label">心理変化</div>
+    <p class="text-sm">「早く見たい」「この人の勉強会なら信頼できそう」</p>
+  </div>
+</div>
+
+<!-- Phase 3 -->
+<div class="card">
+  <div class="card-header">Phase 3: ローンチ <span class="trailing">#09-11 / 4〜5日後</span></div>
+  <div class="card-body">
+    <div class="label">目的</div>
+    <p class="text-body">勉強会URLを初めて解禁し、視聴を促す。「3日間限定」で緊急性を作る。</p>
+    <hr class="divider-inner">
+    <div class="label">出す情報 <span class="pill">4</span></div>
+    <ul class="item-list">
+      <li>勉強会のURL（初解禁）</li>
+      <li>3日間限定公開であること</li>
+      <li>「プログラミング不要・難しい勉強ゼロ」</li>
+      <li>不安への先手対応（「売り込まれそうで怖い」への回答）</li>
+    </ul>
+    <details>
+      <summary>出さない情報 <span class="pill" style="background:#ffffff11;color:#999">3</span></summary>
+      <div class="details-body">
+        <ul class="item-list">
+          <li>スクールの価格・詳細（動画内でも出さない）</li>
+          <li>個別相談会の具体的な内容（動画で初めて出す）</li>
+          <li>アクションプランシートの存在</li>
+        </ul>
+      </div>
+    </details>
+    <hr class="divider-inner">
+    <div class="label-accent">次への接続</div>
+    <p class="text-sm">LINEでURL配信→メールで不安解消→LINEでリマインド。3チャネルで視聴率を上げる。</p>
+    <div class="section-gap"></div>
+    <div class="label">心理変化</div>
+    <p class="text-sm">「やっと見られる」「3日しかないなら今見なきゃ」</p>
+  </div>
+</div>
+
+<!-- Phase 4 -->
+<div class="card">
+  <div class="card-header">Phase 4: クロージング <span class="trailing">#12-16 / 5〜7日後</span></div>
+  <div class="card-body">
+    <div class="label">目的</div>
+    <p class="text-body">未視聴者に視聴を促し、視聴済みの人には面談申込を後押しする。締切で行動を促す。</p>
+    <hr class="divider-inner">
+    <div class="label">出す情報 <span class="pill">4</span></div>
+    <ul class="item-list">
+      <li>FAQ（よくある質問への回答）</li>
+      <li>締切の明示（◯月◯日 23:59）</li>
+      <li>動画で得られることの再提示（3点に凝縮）</li>
+      <li>「行動が遅い人ほど半年後に同じ検索をしている」</li>
+    </ul>
+    <details>
+      <summary>出さない情報 <span class="pill" style="background:#ffffff11;color:#999">2</span></summary>
+      <div class="details-body">
+        <ul class="item-list">
+          <li>スクールの価格（面談でのみ開示）</li>
+          <li>カリキュラムの詳細（面談でのみ開示）</li>
+        </ul>
+      </div>
+    </details>
+    <hr class="divider-inner">
+    <div class="label-accent">次への接続</div>
+    <p class="text-sm">メール→LINE→メール→LINE→メールの交互配信で接触回数を最大化。最終日は2通で畳みかけ。</p>
+    <div class="section-gap"></div>
+    <div class="label">心理変化</div>
+    <p class="text-sm">「見ないと損する」「今動かないとまた同じことの繰り返し」</p>
+  </div>
+</div>
+
+<!-- ===== VIDEO ===== -->
+<h3>勉強会動画</h3>
+
+<div class="card">
+  <div class="card-header">勉強会動画 <span class="trailing">50分 / 全部見せる＋限界を示す</span></div>
+  <div class="card-body">
+    <div class="label">目的</div>
+    <p class="text-body">メルマガで約束した「わかる状態」を全部回収する。その上で「汎用版の限界」を3回提示し、面談の必然性を作る。</p>
+    <hr class="divider-inner">
+    <div class="label">出す情報 <span class="pill">11</span></div>
+    <ul class="item-list">
+      <li>失敗パターン3つと回避策</li>
+      <li>核心メッセージ（AIで仕事の成果を上げる設計）</li>
+      <li>3つの道（会社に残る・転職・独立）</li>
+      <li>STEP 1の実演（資料作成＋画像/動画生成）</li>
+      <li>AIツールの選び方と使い分け</li>
+      <li>やることリスト（汎用版）</li>
+      <li>週単位スケジュール（汎用版）</li>
+      <li>Before/After（3ルート）</li>
+      <li>面談シミュレーション（3ルート）</li>
+      <li>面談=STEP 0（仮決め）という位置づけ</li>
+      <li>アクションプランシートの存在</li>
+    </ul>
+    <details>
+      <summary>出さない情報 <span class="pill" style="background:#ffffff11;color:#999">4</span></summary>
+      <div class="details-body">
+        <ul class="item-list">
+          <li>スクールの価格（面談でのみ）</li>
+          <li>カリキュラムの全体像（面談でのみ）</li>
+          <li>「あなた専用の設計」の中身（面談で作る）</li>
+          <li>受講生の成功事例（まだない→面談シミュレーションで代替）</li>
+        </ul>
+      </div>
+    </details>
+    <hr class="divider-inner">
+    <div class="label-accent">次への接続</div>
+    <p class="text-sm">「汎用版は全部見せた。でもあなた専用の設計は面談でしか作れない」→面談申込ボタンへ。アクションプランシート（持ち帰りOK）で面談のハードルを下げる。</p>
+    <div class="section-gap"></div>
+    <div class="label">心理変化</div>
+    <p class="text-sm">「全部わかった。でも自分の場合どうすればいいかは一人では決められない」「この人に相談したい」</p>
+  </div>
+</div>
+
+<!-- Video Plot Table -->
+<div class="card">
+  <div class="card-header">動画プロット構成（v4）<span class="trailing">合計 約50分</span></div>
+  <div class="card-body" style="padding:0">
+    <table>
+      <thead><tr><th>#</th><th>セクション</th><th>時間</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td>①</td><td>あいさつ・予告</td><td>2分</td><td>締切告知＋「最後に特典あり」で離脱防止</td></tr>
+        <tr><td>②</td><td>自己紹介</td><td>2分</td><td>元Google・金の盾・年商10億。権威と共感を同時に</td></tr>
+        <tr><td>③</td><td>ストーリー</td><td>5分</td><td>Google時代の観察→独立→「設計が足りない人を助けたい」→スクール誕生</td></tr>
+        <tr><td>④</td><td>問題提起</td><td>5分</td><td>失敗パターン3つ（何から？/続かない/差がわからない）＋回避策予告</td></tr>
+        <tr><td>⑤-1</td><td>核心メッセージ</td><td>3分</td><td>「AIで仕事の成果を上げる設計を作る。やることは一つ」</td></tr>
+        <tr><td>⑤-2</td><td>3つの道</td><td>3分</td><td>会社に残る / 転職する / 独立する。副業は全ルート共通</td></tr>
+        <tr><td>⑤-3</td><td>STEP 1 実演</td><td>8分</td><td>資料作成＋画像/動画生成のデモ＋ツール選び方＋やることリスト（汎用版）＋汎用版の限界を提示</td></tr>
+        <tr><td>⑤-4</td><td>Before/After</td><td>2分</td><td>3ルートそれぞれの変化を提示</td></tr>
+        <tr><td>⑤-4b</td><td>スケジュール設計</td><td>2分</td><td>週単位モデルケース（汎用版）＋これも汎用版、一人の限界を提示</td></tr>
+        <tr><td>⑤-5</td><td>3つの壁</td><td>2分</td><td>全部わかった、でもわかることとできることは違う→壁3つ→面談へ</td></tr>
+        <tr><td>⑥</td><td>面談シミュレーション</td><td>3分</td><td>3ルートの面談の進め方を実演。面談の怖さを消す</td></tr>
+        <tr><td>⑦</td><td>CTA・面談案内</td><td>7分</td><td>売りません宣言→STEP 0説明→アクションプランシート→申込導線→クロージング</td></tr>
+        <tr><td>⑧</td><td>延長CTA</td><td>3分</td><td>迷っている人向け再説得＋締切リマインド</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ===== CONSULTATION ===== -->
+<h3>個別相談会</h3>
+
+<div class="card">
+  <div class="card-header">個別相談会 <span class="trailing">STEP 0 / 方向性の仮決め</span></div>
+  <div class="card-body">
+    <div class="label">目的</div>
+    <p class="text-body">視聴者の状況をヒアリングし、3つの道の仮決めをする。アクションプランシートを渡す。入会判断は相談者に委ねる。</p>
+    <hr class="divider-inner">
+    <div class="label">出す情報 <span class="pill">7</span></div>
+    <ul class="item-list">
+      <li>現状ヒアリング→3つの道の仮提案</li>
+      <li>STEP 1で何から始めるかのアクションプラン</li>
+      <li>あなた専用のアクションプランシート（持ち帰りOK）</li>
+      <li>スクールの価格・サポート内容・成功事例</li>
+      <li>現役講師が直接対応する（去年の教材ではない）</li>
+      <li>個別設計（カリキュラム固定ではない）</li>
+      <li>現場参加の機会</li>
+    </ul>
+    <details>
+      <summary>出さない情報 <span class="pill" style="background:#ffffff11;color:#999">1</span></summary>
+      <div class="details-body">
+        <ul class="item-list">
+          <li>なし（面談では全部出す＝透明性が差別化）</li>
+        </ul>
+      </div>
+    </details>
+    <hr class="divider-inner">
+    <div class="label-accent">次への接続</div>
+    <p class="text-sm">「仮決めでいい。STEP 1で変えてもいい」で決断のプレッシャーを消す。シートを見てから入会判断できるので、面談自体にリスクがない。</p>
+    <div class="section-gap"></div>
+    <div class="label">心理変化</div>
+    <p class="text-sm">「自分の場合はこうすればいいのか」「この人たちと一緒にやれば続けられそう」</p>
+  </div>
+</div>
+
+<!-- Consultation Flow -->
+<div class="card">
+  <div class="card-header">個別相談会の流れ（STEP 0）<span class="trailing">30分・無料・オンライン</span></div>
+  <div class="card-body">
+    <div class="consult-step"><div class="step-title">1. アイスブレイク</div><div class="step-detail">自己紹介＋「今日は売り込みません」宣言。面談の目的（STEP 0 = 方向性の仮決め）を伝える</div></div>
+    <div class="consult-step"><div class="step-title">2. 現状ヒアリング</div><div class="step-detail">今の仕事内容・年収・不満・AIの経験・使える時間・目標を聞く</div></div>
+    <div class="consult-step"><div class="step-title">3. ルートの仮提案</div><div class="step-detail">3つの道のどれが合いそうかを提案。「仮決めでいい。STEP 1で変えてもいい」と伝える</div></div>
+    <div class="consult-step"><div class="step-title">4. アクションプラン設計</div><div class="step-detail">動画で見せた汎用版リスト＋スケジュールを「あなたの仕事」に合わせてカスタマイズ。シートにまとめる</div></div>
+    <div class="consult-step"><div class="step-title accent">5. アクションプランシート渡し</div><div class="step-detail">最初の1ヶ月で何をやるかを記載した「あなた専用シート」を渡す。入会しなくても持ち帰りOK</div></div>
+    <div class="consult-step"><div class="step-title">6. スクールの説明</div><div class="step-detail">価格・サポート内容・カリキュラム・現場参加の機会を全部開示。質問に全て答える</div></div>
+    <div class="consult-step"><div class="step-title">7. 判断は相談者に委ねる</div><div class="step-detail">「シートを見てから決めてください」で締める。その場で決めなくてもOKと伝える</div></div>
+    <hr class="divider-inner">
+    <div class="design-note">
+      <div class="label">設計思想</div>
+      <p class="text-sm">面談自体に価値がある（シートが手に入る）ので、申込のリスクがゼロ。価格は面談でのみ開示＝透明性が差別化。「仮決め」なので決断のプレッシャーもない。</p>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ===== GOAL ===== -->
+<div class="card">
+  <div class="card-header">ゴール: スクール入会（STEP 1-3）</div>
+  <div class="card-body">
+    <p class="text-body">面談（STEP 0）で仮決めした方向性をもとに、STEP 1「AIで仕事の成果を上げる」から開始。STEP 1の実感をもとにルートを本決めし（STEP 2）、ゴールに到達する（STEP 3）。</p>
+    <p class="text-sm" style="margin-top:8px">全ステージを通じて価格は面談まで非開示。「面談に来れば全部わかる」が一貫した設計。</p>
+  </div>
+</div>
+
+</body>
+</html>
