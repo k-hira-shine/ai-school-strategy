@@ -6,19 +6,19 @@
 <title>ファネル全体設計</title>
 <style>
   :root {
-    --bg: #1e1e1e;
-    --bg-card: #252526;
-    --bg-elevated: #2d2d2d;
-    --text-primary: #cccccc;
-    --text-secondary: #999999;
-    --text-tertiary: #666666;
-    --stroke: #3e3e3e;
-    --stroke-light: #2e2e2e;
-    --accent: #4a9eff;
-    --accent-bg: #264f78;
+    --bg: #f8f9fa;
+    --bg-card: #ffffff;
+    --bg-elevated: #f0f1f3;
+    --text-primary: #1a1a1a;
+    --text-secondary: #555555;
+    --text-tertiary: #888888;
+    --stroke: #d0d5dd;
+    --stroke-light: #e8eaed;
+    --accent: #2563eb;
+    --accent-bg: #dbeafe;
     --accent-on: #ffffff;
-    --success: #2ea04366;
-    --success-text: #4ec96b;
+    --success: #dcfce7;
+    --success-text: #16a34a;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -111,54 +111,54 @@
 <svg width="1200" height="104" viewBox="0 0 1200 104">
   <defs>
     <marker id="arrow" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#3e3e3e"/>
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
     </marker>
   </defs>
 
   <!-- group label: メルマガ / LINE -->
-  <rect x="16" y="0" width="632" height="18" rx="4" fill="#ffffff0a"/>
-  <text x="332" y="13" text-anchor="middle" fill="#666666" font-size="10" font-weight="600">メルマガ / LINE（16通）</text>
+  <rect x="16" y="0" width="632" height="18" rx="4" fill="#e2e8f0"/>
+  <text x="332" y="13" text-anchor="middle" fill="#475569" font-size="10" font-weight="600">メルマガ / LINE（16通）</text>
 
   <!-- edges -->
-  <line x1="136" y1="52" x2="168" y2="52" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="304" y1="52" x2="336" y2="52" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="472" y1="52" x2="504" y2="52" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="648" y1="52" x2="680" y2="52" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="816" y1="52" x2="848" y2="52" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
-  <line x1="984" y1="52" x2="1016" y2="52" stroke="#3e3e3e" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="136" y1="52" x2="168" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="304" y1="52" x2="336" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="472" y1="52" x2="504" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="648" y1="52" x2="680" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="816" y1="52" x2="848" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="984" y1="52" x2="1016" y2="52" stroke="#94a3b8" stroke-width="2" marker-end="url(#arrow)"/>
 
   <!-- nodes -->
-  <rect x="16" y="22" width="120" height="60" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
-  <text x="76" y="44" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">Phase 1</text>
-  <text x="76" y="60" text-anchor="middle" fill="#999999" font-size="11">信頼構築</text>
-  <text x="76" y="74" text-anchor="middle" fill="#666666" font-size="10">#01-04</text>
+  <rect x="16" y="22" width="120" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="76" y="44" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="600">Phase 1</text>
+  <text x="76" y="60" text-anchor="middle" fill="#475569" font-size="11">信頼構築</text>
+  <text x="76" y="74" text-anchor="middle" fill="#94a3b8" font-size="10">#01-04</text>
 
-  <rect x="168" y="22" width="136" height="60" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
-  <text x="236" y="44" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">Phase 2</text>
-  <text x="236" y="60" text-anchor="middle" fill="#999999" font-size="11">期待醸成</text>
-  <text x="236" y="74" text-anchor="middle" fill="#666666" font-size="10">#05-08</text>
+  <rect x="168" y="22" width="136" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="236" y="44" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="600">Phase 2</text>
+  <text x="236" y="60" text-anchor="middle" fill="#475569" font-size="11">期待醸成</text>
+  <text x="236" y="74" text-anchor="middle" fill="#94a3b8" font-size="10">#05-08</text>
 
-  <rect x="336" y="22" width="136" height="60" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
-  <text x="404" y="44" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">Phase 3</text>
-  <text x="404" y="60" text-anchor="middle" fill="#999999" font-size="11">ローンチ</text>
-  <text x="404" y="74" text-anchor="middle" fill="#666666" font-size="10">#09-11</text>
+  <rect x="336" y="22" width="136" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="404" y="44" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="600">Phase 3</text>
+  <text x="404" y="60" text-anchor="middle" fill="#475569" font-size="11">ローンチ</text>
+  <text x="404" y="74" text-anchor="middle" fill="#94a3b8" font-size="10">#09-11</text>
 
-  <rect x="504" y="22" width="144" height="60" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
-  <text x="576" y="44" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">Phase 4</text>
-  <text x="576" y="60" text-anchor="middle" fill="#999999" font-size="11">クロージング</text>
-  <text x="576" y="74" text-anchor="middle" fill="#666666" font-size="10">#12-16</text>
+  <rect x="504" y="22" width="144" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="576" y="44" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="600">Phase 4</text>
+  <text x="576" y="60" text-anchor="middle" fill="#475569" font-size="11">クロージング</text>
+  <text x="576" y="74" text-anchor="middle" fill="#94a3b8" font-size="10">#12-16</text>
 
-  <rect x="680" y="22" width="136" height="60" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
-  <text x="748" y="46" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">勉強会動画</text>
-  <text x="748" y="64" text-anchor="middle" fill="#999999" font-size="11">50分</text>
+  <rect x="680" y="22" width="136" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="748" y="46" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="600">勉強会動画</text>
+  <text x="748" y="64" text-anchor="middle" fill="#475569" font-size="11">50分</text>
 
-  <rect x="848" y="22" width="136" height="60" rx="8" fill="#2d2d2d" stroke="#3e3e3e"/>
-  <text x="916" y="46" text-anchor="middle" fill="#cccccc" font-size="13" font-weight="600">個別相談会</text>
-  <text x="916" y="64" text-anchor="middle" fill="#999999" font-size="11">STEP 0</text>
+  <rect x="848" y="22" width="136" height="60" rx="8" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="916" y="46" text-anchor="middle" fill="#1e293b" font-size="13" font-weight="600">個別相談会</text>
+  <text x="916" y="64" text-anchor="middle" fill="#475569" font-size="11">STEP 0</text>
 
-  <rect x="1016" y="22" width="136" height="60" rx="8" fill="#4a9eff" stroke="#4a9eff"/>
+  <rect x="1016" y="22" width="136" height="60" rx="8" fill="#2563eb" stroke="#2563eb"/>
   <text x="1084" y="46" text-anchor="middle" fill="#ffffff" font-size="13" font-weight="600">スクール</text>
-  <text x="1084" y="64" text-anchor="middle" fill="#ffffffcc" font-size="11">STEP 1-3</text>
+  <text x="1084" y="64" text-anchor="middle" fill="#ffffffdd" font-size="11">STEP 1-3</text>
 </svg>
 </div>
 
