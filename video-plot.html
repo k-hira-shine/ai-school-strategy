@@ -5,224 +5,167 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>勉強会動画プロット（v4）</title>
 <style>
-  :root {
-    --bg: #f8f9fa;
-    --bg-card: #ffffff;
-    --bg-elevated: #f0f1f3;
-    --text-primary: #1a1a1a;
-    --text-secondary: #555555;
-    --text-tertiary: #888888;
-    --stroke: #d0d5dd;
-    --stroke-light: #e8eaed;
-    --accent: #2563eb;
-    --accent-bg: #dbeafe;
-    --accent-text: #1e40af;
-    --success: #dcfce7;
-    --success-text: #16a34a;
-    --warn-bg: #fef9c3;
-    --warn-text: #a16207;
-    --section-1: #eff6ff;
-    --section-1-border: #bfdbfe;
-    --section-2: #faf5ff;
-    --section-2-border: #e9d5ff;
-    --section-3: #ecfdf5;
-    --section-3-border: #a7f3d0;
-    --section-4: #fff7ed;
-    --section-4-border: #fed7aa;
-    --section-5: #fef2f2;
-    --section-5-border: #fecaca;
-  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    line-height: 1.7;
-    padding: 32px 24px 64px;
-    max-width: 900px;
+    background: #ffffff;
+    color: #222222;
+    line-height: 1.8;
+    padding: 40px 28px 80px;
+    max-width: 860px;
     margin: 0 auto;
+    font-size: 15px;
   }
-  h1 { font-size: 26px; font-weight: 700; margin-bottom: 4px; }
-  .subtitle { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+  h1 { font-size: 28px; font-weight: 700; margin-bottom: 6px; color: #111; }
+  .subtitle { color: #666; font-size: 14px; margin-bottom: 32px; }
   h2 {
-    font-size: 18px; font-weight: 700;
-    margin-top: 36px; margin-bottom: 14px;
-    padding-bottom: 6px;
-    border-bottom: 2px solid var(--accent);
-    color: var(--accent-text);
+    font-size: 20px; font-weight: 700;
+    margin-top: 48px; margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 3px solid #222;
+    color: #111;
   }
-  h3 { font-size: 15px; font-weight: 700; margin-top: 20px; margin-bottom: 8px; color: var(--text-primary); }
-  h4 { font-size: 14px; font-weight: 600; margin-top: 16px; margin-bottom: 6px; color: var(--text-secondary); }
+  h3 { font-size: 17px; font-weight: 700; margin-top: 28px; margin-bottom: 10px; color: #111; }
+  h4 { font-size: 15px; font-weight: 700; margin-top: 20px; margin-bottom: 8px; color: #333; }
 
   /* timeline */
   .timeline-bar {
-    display: flex; gap: 2px; margin: 20px 0 8px; border-radius: 6px; overflow: hidden; height: 32px;
+    display: flex; gap: 2px; margin: 20px 0 12px; border-radius: 8px; overflow: hidden; height: 36px;
   }
   .timeline-bar .seg {
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 600; color: #fff; white-space: nowrap; padding: 0 6px;
+    font-size: 12px; font-weight: 700; color: #fff; white-space: nowrap; padding: 0 8px;
   }
 
   /* tables */
-  table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 12px 0; }
-  th { text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--stroke); color: var(--text-secondary); font-weight: 600; background: var(--bg-elevated); }
-  td { padding: 7px 12px; border-bottom: 1px solid var(--stroke-light); color: var(--text-secondary); vertical-align: top; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; margin: 14px 0; }
+  th { text-align: left; padding: 10px 14px; border-bottom: 2px solid #ddd; color: #555; font-weight: 700; background: #f7f7f7; }
+  td { padding: 9px 14px; border-bottom: 1px solid #eee; color: #444; vertical-align: top; }
   tr:last-child td { border-bottom: none; }
-  td:first-child { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
 
   /* cards */
   .card {
-    background: var(--bg-card);
-    border: 1px solid var(--stroke);
-    border-radius: 10px;
-    margin-bottom: 14px;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 20px;
     overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
   }
   .card-header {
     display: flex; justify-content: space-between; align-items: center;
-    padding: 12px 16px;
-    border-bottom: 1px solid var(--stroke-light);
-    font-weight: 700; font-size: 14px;
+    padding: 14px 20px;
+    font-weight: 700; font-size: 16px;
+    color: #fff;
   }
+  .card-header .badges { display: flex; gap: 8px; }
   .card-header .badge {
-    font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 10px;
+    font-size: 12px; font-weight: 600; padding: 3px 12px; border-radius: 12px;
+    background: rgba(255,255,255,0.25); color: #fff;
   }
-  .card-body { padding: 16px; }
+  .card-body { padding: 20px 24px; }
 
-  /* section cards — colored left border */
-  .section-card { border-left: 4px solid; }
-  .section-card.s1 { border-left-color: #3b82f6; }
-  .section-card.s2 { border-left-color: #8b5cf6; }
-  .section-card.s3 { border-left-color: #10b981; }
-  .section-card.s4 { border-left-color: #f59e0b; }
-  .section-card.s5 { border-left-color: #ef4444; }
-  .section-card.s6 { border-left-color: #6366f1; }
-  .section-card.s7 { border-left-color: #0891b2; }
-  .section-card.s8 { border-left-color: #d946ef; }
+  /* section header colors */
+  .s1 .card-header { background: #3b82f6; }
+  .s2 .card-header { background: #8b5cf6; }
+  .s3 .card-header { background: #10b981; }
+  .s4 .card-header { background: #f59e0b; color: #422006; }
+  .s4 .card-header .badge { color: #422006; }
+  .s5 .card-header { background: #ef4444; }
+  .s6 .card-header { background: #6366f1; }
+  .s7 .card-header { background: #0891b2; }
+  .s8 .card-header { background: #d946ef; }
 
-  .badge-time { background: var(--accent-bg); color: var(--accent-text); }
-  .badge-chars { background: var(--bg-elevated); color: var(--text-tertiary); }
-
-  /* purpose box */
+  /* purpose */
   .purpose {
-    background: var(--accent-bg); border-radius: 6px; padding: 10px 14px;
-    font-size: 13px; color: var(--accent-text); font-weight: 600; margin-bottom: 12px;
+    background: #f0f4ff; border-left: 4px solid #3b82f6; border-radius: 0 8px 8px 0;
+    padding: 12px 16px; font-size: 14px; color: #1e40af; font-weight: 600; margin-bottom: 16px;
   }
-
-  /* quote / note */
-  .note {
-    background: var(--bg-elevated); border-radius: 6px; padding: 10px 14px;
-    font-size: 12px; color: var(--text-tertiary); margin-top: 10px; line-height: 1.6;
-  }
-  .note strong { color: var(--text-secondary); }
 
   /* script lines */
-  .script { font-size: 13px; color: var(--text-secondary); line-height: 1.8; }
-  .script li { margin-bottom: 6px; list-style: none; padding-left: 16px; position: relative; }
-  .script li::before { content: ""; position: absolute; left: 0; top: 10px; width: 5px; height: 5px; border-radius: 50%; background: var(--text-tertiary); }
+  .script { font-size: 15px; color: #444; line-height: 1.9; }
+  .script li { margin-bottom: 8px; list-style: none; padding-left: 18px; position: relative; }
+  .script li::before { content: ""; position: absolute; left: 0; top: 12px; width: 6px; height: 6px; border-radius: 50%; background: #bbb; }
   .script .line-quote {
-    background: var(--warn-bg); border-left: 3px solid var(--warn-text);
-    padding: 6px 10px; border-radius: 0 4px 4px 0; margin: 4px 0; font-size: 13px; color: var(--warn-text);
+    background: #fffbeb; border-left: 3px solid #d97706;
+    padding: 8px 14px; border-radius: 0 6px 6px 0; margin: 6px 0; font-size: 15px; color: #92400e;
   }
 
   /* pattern cards */
-  .pattern { background: var(--bg-card); border: 1px solid var(--stroke-light); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
-  .pattern .pat-title { font-weight: 700; font-size: 13px; margin-bottom: 4px; }
-  .pattern .pat-body { font-size: 13px; color: var(--text-secondary); }
-  .pattern .pat-fix { font-size: 12px; color: var(--success-text); margin-top: 4px; font-weight: 600; }
+  .pattern { background: #fafafa; border: 1px solid #e5e5e5; border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
+  .pattern .pat-title { font-weight: 700; font-size: 15px; margin-bottom: 6px; color: #222; }
+  .pattern .pat-body { font-size: 14px; color: #555; }
+  .pattern .pat-fix { font-size: 14px; color: #16a34a; margin-top: 6px; font-weight: 600; }
 
   /* route cards */
-  .route-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; margin: 10px 0; }
-  .route-card { border: 1px solid var(--stroke); border-radius: 8px; padding: 14px; background: var(--bg-card); }
-  .route-card .route-name { font-weight: 700; font-size: 14px; margin-bottom: 6px; }
-  .route-card .route-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+  .route-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin: 14px 0; }
+  .route-card { border: 2px solid #e5e5e5; border-radius: 10px; padding: 18px; background: #fafafa; }
+  .route-card .route-name { font-weight: 700; font-size: 16px; margin-bottom: 8px; color: #111; }
+  .route-card .route-desc { font-size: 14px; color: #555; line-height: 1.7; }
 
   /* before-after */
-  .ba-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 8px; border: 1px solid var(--stroke-light); border-radius: 8px; overflow: hidden; }
-  .ba-cell { padding: 10px 14px; font-size: 13px; }
+  .ba-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-bottom: 10px; border: 1px solid #e5e5e5; border-radius: 10px; overflow: hidden; }
+  .ba-cell { padding: 14px 18px; font-size: 14px; }
   .ba-cell.before { background: #fef2f2; color: #991b1b; }
   .ba-cell.after { background: #ecfdf5; color: #065f46; }
-  .ba-label { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-
-  /* schedule table */
-  .schedule-table td:first-child { width: 100px; }
+  .ba-label { font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
 
   /* checklist */
   .checklist { list-style: none; padding: 0; }
-  .checklist li { font-size: 13px; color: var(--text-secondary); padding: 4px 0 4px 24px; position: relative; }
-  .checklist li::before { content: "✅"; position: absolute; left: 0; top: 4px; font-size: 13px; }
+  .checklist li { font-size: 15px; color: #444; padding: 5px 0 5px 28px; position: relative; }
+  .checklist li::before { content: "✅"; position: absolute; left: 0; top: 5px; font-size: 14px; }
 
   /* wall cards */
-  .wall { background: var(--section-5); border: 1px solid var(--section-5-border); border-radius: 8px; padding: 12px 16px; margin-bottom: 8px; }
-  .wall .wall-title { font-weight: 700; font-size: 13px; color: #dc2626; margin-bottom: 4px; }
-  .wall .wall-body { font-size: 13px; color: var(--text-secondary); }
+  .wall { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 16px 20px; margin-bottom: 10px; }
+  .wall .wall-title { font-weight: 700; font-size: 15px; color: #dc2626; margin-bottom: 6px; }
+  .wall .wall-body { font-size: 14px; color: #555; line-height: 1.7; }
 
   /* sim cards */
-  .sim { background: var(--section-2); border: 1px solid var(--section-2-border); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
-  .sim .sim-title { font-weight: 700; font-size: 13px; color: #7c3aed; margin-bottom: 6px; }
-  .sim .sim-body { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+  .sim { background: #f5f3ff; border: 1px solid #e9d5ff; border-radius: 10px; padding: 18px 20px; margin-bottom: 12px; }
+  .sim .sim-title { font-weight: 700; font-size: 15px; color: #6d28d9; margin-bottom: 8px; }
+  .sim .sim-body { font-size: 14px; color: #555; line-height: 1.8; }
 
   /* divider */
-  .divider { border: none; border-top: 1px solid var(--stroke-light); margin: 28px 0; }
+  .divider { border: none; border-top: 1px solid #eee; margin: 36px 0; }
 
   /* core message box */
   .core-msg {
-    background: linear-gradient(135deg, #1e3a5f, #2563eb);
-    color: #fff; border-radius: 10px; padding: 20px 24px; margin: 16px 0;
-    font-size: 14px; line-height: 1.8;
+    background: #111827;
+    color: #f9fafb; border-radius: 12px; padding: 24px 28px; margin: 20px 0;
+    font-size: 16px; line-height: 1.9;
   }
   .core-msg strong { color: #fbbf24; }
 
-  /* meta info */
-  .meta-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin: 12px 0; }
-  .meta-item { background: var(--bg-card); border: 1px solid var(--stroke); border-radius: 8px; padding: 12px 16px; }
-  .meta-item .meta-label { font-size: 11px; font-weight: 600; color: var(--text-tertiary); text-transform: uppercase; letter-spacing: 0.5px; }
-  .meta-item .meta-value { font-size: 14px; font-weight: 700; margin-top: 2px; }
-
-  /* connection list */
-  .conn { font-size: 12px; color: var(--accent-text); background: var(--accent-bg); border-radius: 6px; padding: 8px 12px; margin-top: 10px; line-height: 1.6; }
-  .conn strong { font-weight: 700; }
-
   /* filming notes */
-  .filming-table td { font-size: 13px; }
-  .filming-table td:first-child { width: 140px; font-weight: 600; color: var(--accent-text); }
+  .filming-table td { font-size: 14px; }
+  .filming-table td:first-child { width: 160px; font-weight: 700; color: #333; }
 
   /* next actions */
   .action-list { list-style: none; padding: 0; }
-  .action-list li { font-size: 13px; color: var(--text-secondary); padding: 6px 0 6px 28px; position: relative; border-bottom: 1px solid var(--stroke-light); }
+  .action-list li { font-size: 15px; color: #444; padding: 8px 0 8px 32px; position: relative; border-bottom: 1px solid #eee; }
   .action-list li:last-child { border-bottom: none; }
-  .action-list li::before { content: "☐"; position: absolute; left: 4px; top: 6px; font-size: 14px; color: var(--text-tertiary); }
+  .action-list li::before { content: "☐"; position: absolute; left: 4px; top: 8px; font-size: 16px; color: #999; }
+
+  /* route label */
+  .route-label { font-size: 15px; font-weight: 700; color: #333; margin-bottom: 6px; }
 </style>
 </head>
 <body>
 
 <h1>勉強会動画 プロット（v4）</h1>
-<p class="subtitle">作成日：2026-05-26 ／ 3ルート再定義＋「3つの壁」ブリッジ追加＋副業＝全ルート共通スキル化</p>
+<p class="subtitle">作成日：2026-05-26</p>
 
 <!-- ===== 前提設計 ===== -->
 <h2>前提設計</h2>
-<div class="meta-grid">
-  <div class="meta-item">
-    <div class="meta-label">動画の役割</div>
-    <div class="meta-value" style="font-size:13px;font-weight:500;line-height:1.5">メルマガ・LINEの約束を回収し、面談申込へ動かす</div>
-  </div>
-  <div class="meta-item">
-    <div class="meta-label">想定視聴者</div>
-    <div class="meta-value" style="font-size:13px;font-weight:500">35歳会社員・年収500万の壁・副業ゼロ</div>
-  </div>
-  <div class="meta-item">
-    <div class="meta-label">動画の長さ</div>
-    <div class="meta-value">47分 + 3分 ≒ 50分</div>
-  </div>
-  <div class="meta-item">
-    <div class="meta-label">話す速度</div>
-    <div class="meta-value">300字/分</div>
-  </div>
-  <div class="meta-item">
-    <div class="meta-label">視聴後のゴール</div>
-    <div class="meta-value" style="font-size:13px;font-weight:500">「自分でもできそう」＋「相談したい」→ 面談申込</div>
-  </div>
-</div>
+<table>
+  <tbody>
+    <tr><td style="font-weight:700;color:#222;width:140px">動画の役割</td><td>メルマガ・LINEの約束を回収し、面談申込へ動かす</td></tr>
+    <tr><td style="font-weight:700;color:#222">想定視聴者</td><td>35歳会社員・年収500万の壁・副業ゼロ・難しいことはしたくない</td></tr>
+    <tr><td style="font-weight:700;color:#222">動画の長さ</td><td>47分（本編）＋ 3分（延長CTA）＝ 約50分</td></tr>
+    <tr><td style="font-weight:700;color:#222">話す速度</td><td>300字/分</td></tr>
+    <tr><td style="font-weight:700;color:#222">視聴後のゴール</td><td>「自分でもできそう」＋「この人に相談したい」→ 面談申込</td></tr>
+  </tbody>
+</table>
 
 <!-- ===== 核心メッセージ ===== -->
 <h2>核心メッセージ</h2>
@@ -243,19 +186,19 @@
   <div class="seg" style="flex:2;background:#8b5cf6">② 2分</div>
   <div class="seg" style="flex:5;background:#a855f7">③ 5分</div>
   <div class="seg" style="flex:5;background:#10b981">④ 5分</div>
-  <div class="seg" style="flex:20;background:#f59e0b">⑤ 20分</div>
+  <div class="seg" style="flex:20;background:#f59e0b;color:#422006">⑤ 20分</div>
   <div class="seg" style="flex:3;background:#6366f1">⑥ 3分</div>
   <div class="seg" style="flex:7;background:#0891b2">⑦ 7分</div>
   <div class="seg" style="flex:3;background:#d946ef">⑧ 3分</div>
 </div>
 
 <table>
-  <thead><tr><th>#</th><th>セクション</th><th>時間</th><th>文字数</th><th>内容密度チェック</th></tr></thead>
+  <thead><tr><th>#</th><th>セクション</th><th>時間</th><th>文字数</th><th>内容</th></tr></thead>
   <tbody>
-    <tr><td>①</td><td>あいさつ・予告</td><td>2分</td><td>600字</td><td>締切告知＋予告のみ。手短に</td></tr>
-    <tr><td>②</td><td>自己紹介</td><td>2分</td><td>600字</td><td>実績3点＋動機1文。テロップ補強</td></tr>
+    <tr><td>①</td><td>あいさつ・予告</td><td>2分</td><td>600字</td><td>締切告知＋予告のみ</td></tr>
+    <tr><td>②</td><td>自己紹介</td><td>2分</td><td>600字</td><td>実績3点＋動機1文</td></tr>
     <tr><td>③</td><td>ストーリー</td><td>5分</td><td>1,500字</td><td>Google時代の気づき→独立→確信→スクール設計</td></tr>
-    <tr><td>④</td><td>問題提起</td><td>5分</td><td>1,500字</td><td>失敗パターン3つ＋原因の明示＋回避策予告＋転換</td></tr>
+    <tr><td>④</td><td>問題提起</td><td>5分</td><td>1,500字</td><td>失敗パターン3つ＋原因の明示＋回避策予告</td></tr>
     <tr><td>⑤</td><td>メソッド説明</td><td>20分</td><td>6,600字</td><td>核心メッセージ＋3ルート＋実演＋ツール＋スケジュール＋3つの壁</td></tr>
     <tr><td>⑥</td><td>面談シミュレーション</td><td>3分</td><td>900字</td><td>3ルート×面談の進め方を実演</td></tr>
     <tr><td>⑦</td><td>CTA・面談案内</td><td>7分</td><td>2,100字</td><td>面談＝STEP 0＋申込導線＋クロージング</td></tr>
@@ -267,35 +210,33 @@
 <hr class="divider">
 
 <!-- ===== 動画構成 ===== -->
-<h2>動画構成（全8セクション）</h2>
+<h2>動画構成</h2>
 
 <!-- ① あいさつ -->
-<div class="card section-card s1">
+<div class="card s1">
   <div class="card-header">
     ① あいさつ・予告（0:00〜2:00）
-    <span><span class="badge badge-time">2分</span> <span class="badge badge-chars">600字</span></span>
+    <div class="badges"><span class="badge">2分</span><span class="badge">600字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">目的：「最後まで見る理由」を先出しして離脱を防ぐ</div>
-    <h4>セリフ構成イメージ</h4>
+    <div class="purpose">「最後まで見る理由」を先出しして離脱を防ぐ</div>
     <ul class="script">
       <li>この動画を受け取ってくれてありがとうございます</li>
       <li>このページと動画は<strong>3日間限定</strong>。1度しか表示されないので注意深くご覧ください</li>
       <li>この動画を最後まで見てくれた方に、<strong>もう一つの特典</strong>をご案内します（→ 面談申込チケット）</li>
       <li>「この特典は動画の最後でお話しします。ぜひ最後まで見てください」</li>
     </ul>
-
   </div>
 </div>
 
 <!-- ② 自己紹介 -->
-<div class="card section-card s2">
+<div class="card s2">
   <div class="card-header">
     ② 自己紹介（2:00〜4:00）
-    <span><span class="badge badge-time">2分</span> <span class="badge badge-chars">600字</span></span>
+    <div class="badges"><span class="badge">2分</span><span class="badge">600字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">目的：権威と共感を同時に作る。「この人の話なら聞く価値がある」</div>
+    <div class="purpose">権威と共感を同時に作る。「この人の話なら聞く価値がある」</div>
     <h4>実績の提示（画面テロップ＋口頭）</h4>
     <ul class="script">
       <li>元Google社員</li>
@@ -304,24 +245,21 @@
     </ul>
     <h4>なぜ活動しているかの動機（1文）</h4>
     <ul class="script">
-      <li>
-        <div class="line-quote">「Googleにいたとき、AIを使いこなして成果を出す人と、全然使えないまま終わる人、両方を見てきました。その差が何か——それが今日の話の核心です」</div>
-      </li>
+      <li><div class="line-quote">「Googleにいたとき、AIを使いこなして成果を出す人と、全然使えないまま終わる人、両方を見てきました。その差が何か——それが今日の話の核心です」</div></li>
     </ul>
-
   </div>
 </div>
 
 <!-- ③ ストーリー -->
-<div class="card section-card s3">
+<div class="card s3">
   <div class="card-header">
     ③ ストーリー（4:00〜9:00）
-    <span><span class="badge badge-time">5分</span> <span class="badge badge-chars">1,500字</span></span>
+    <div class="badges"><span class="badge">5分</span><span class="badge">1,500字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">目的：スクールの設計思想が生まれた背景を体験談で語り、⑤メソッド説明への伏線を張る</div>
+    <div class="purpose">スクールの設計思想が生まれた背景を体験談で語り、⑤への伏線を張る</div>
 
-    <h4>Google時代の観察（気づきフェーズ）</h4>
+    <h4>Google時代の観察</h4>
     <ul class="script">
       <li><div class="line-quote">「Googleには優秀な人しかいないと思うでしょう？でも、AIの使い方には明確な差がありました」</div></li>
       <li><strong>使えていない人：</strong>AIの新機能が出るたびに飛びつく。勉強会にも出る。でも仕事のアウトプットが変わらない</li>
@@ -329,7 +267,7 @@
       <li><div class="line-quote">「この差を見ていて気づいたんです。AIが使える・使えないは"知識の量"じゃない。"何のために使うか"が決まっているかどうかだって」</div></li>
     </ul>
 
-    <h4>独立後の体験（確信フェーズ）</h4>
+    <h4>独立後の体験</h4>
     <ul class="script">
       <li>独立してAI×マーケのチームを作った。やったことはシンプルで、「YouTube・SNSなどのマーケティング」というゴールに対してAIの使い方を逆算して設計した</li>
       <li>チームは成長し、グループ年商10億になった</li>
@@ -337,25 +275,23 @@
       <li>足りないのは、AIの知識ではなく<strong>"どの仕事に・どう当てるか"の設計</strong>だと確信した</li>
     </ul>
 
-    <h4>着地（スクール設計への接続）</h4>
+    <h4>着地</h4>
     <ul class="script">
       <li><div class="line-quote">「AIを学ぶ場所ではなく、"あなたの目的に合ったAIの使い方を一緒に設計する場所"を作ろう。そう思ったのがきっかけです」</div></li>
     </ul>
-
   </div>
 </div>
 
 <!-- ④ 問題提起 -->
-<div class="card section-card s4">
+<div class="card s4">
   <div class="card-header">
     ④ 問題提起（9:00〜14:00）
-    <span><span class="badge badge-time">5分</span> <span class="badge badge-chars">1,500字</span></span>
+    <div class="badges"><span class="badge">5分</span><span class="badge">1,500字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">目的：視聴者の心の声を代弁して「自分のための動画だ」を確定させる</div>
+    <div class="purpose">視聴者の心の声を代弁して「自分のための動画だ」を確定させる</div>
 
     <h4>3つの失敗パターン</h4>
-
     <div class="pattern">
       <div class="pat-title">パターン1：「何から始めればいいかわからない」</div>
       <div class="pat-body">ツールは触った。でも"自分の仕事のどこに使うか"がないから止まる</div>
@@ -375,7 +311,7 @@
     <h4>「それは全部、これが原因です」</h4>
     <ul class="script">
       <li><strong>"行動の設計"がないから起きること。</strong>AIのスキルの問題ではない</li>
-      <li><div class="line-quote">「さっき話した、Googleで"使えなかった人たち"と全く同じ状態です」（③ストーリーを回収）</div></li>
+      <li><div class="line-quote">「さっき話した、Googleで"使えなかった人たち"と全く同じ状態です」</div></li>
     </ul>
 
     <h4>転換</h4>
@@ -386,15 +322,14 @@
 </div>
 
 <!-- ⑤ メソッド説明 -->
-<div class="card section-card s5">
+<div class="card s5">
   <div class="card-header">
     ⑤ メソッド説明（14:00〜34:00）
-    <span><span class="badge badge-time">20分</span> <span class="badge badge-chars">6,600字</span></span>
+    <div class="badges"><span class="badge">20分</span><span class="badge">6,600字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">目的：「この方法は本物だ」「自分にもできる」を論理と実演で証明し、「でも一人では設計できない」→ 面談へのブリッジを作る</div>
+    <div class="purpose">「この方法は本物だ」「自分にもできる」を論理と実演で証明し、「でも一人では設計できない」→ 面談へのブリッジを作る</div>
 
-    <!-- 5-1 -->
     <h3>5-1. 核心メッセージ（14:00〜17:00 ／ 900字）</h3>
     <ul class="script">
       <li><div class="line-quote">「AIを使って年収を上げる。やることは一つです」</div></li>
@@ -403,9 +338,8 @@
       <li>「この設計ができると、3つの道が勝手に開きます」</li>
     </ul>
 
-    <!-- 5-2 -->
     <h3>5-2. 3つの道（17:00〜20:00 ／ 900字）</h3>
-    <p class="script" style="margin-bottom:10px">「AIで仕事の成果を上げられるようになると、選択肢が生まれます」</p>
+    <p class="script" style="margin-bottom:12px">「AIで仕事の成果を上げられるようになると、選択肢が生まれます」</p>
     <div class="route-grid">
       <div class="route-card">
         <div class="route-name">① 会社に残る</div>
@@ -425,9 +359,8 @@
       <li>「どの道が自分に合っているかは、今の段階ではわからなくて当然です。それを一緒に決めるところから始めます」</li>
     </ul>
 
-    <!-- 5-3 -->
     <h3>5-3. STEP 1の実演：AIで仕事の成果を上げる（20:00〜28:00 ／ 2,400字）</h3>
-    <p class="script" style="margin-bottom:8px">STEP 0（面談）で方向性を仮決めした後、STEP 1は全員共通——「AIを使って、今の仕事の成果を上げる」。</p>
+    <p class="script" style="margin-bottom:10px">STEP 0（面談）で方向性を仮決めした後、STEP 1は全員共通——「AIを使って、今の仕事の成果を上げる」。</p>
 
     <h4>なぜここから始めるか</h4>
     <ul class="script">
@@ -445,7 +378,7 @@
       <li>「この2つ（資料＋画像/動画）ができるだけで、副業の案件は取れるし、本業でも周りと差がつきます」</li>
     </ul>
 
-    <h4>AIツールの選び方と使い分け（テロップ＋口頭）</h4>
+    <h4>AIツールの選び方と使い分け</h4>
     <ul class="script">
       <li>「AIツールはたくさんあるけど、今の段階で覚えるべきものは3つだけです」</li>
     </ul>
@@ -467,38 +400,36 @@
       <li>その中で「AIに置き換えられそうなもの」を1つ選ぶ</li>
       <li>今日紹介したツールで1回試してみる</li>
     </ul>
-    <ul class="script" style="margin-top:8px">
+    <ul class="script" style="margin-top:10px">
       <li><div class="line-quote">「——ただし、正直に言います。このリストは"誰にでも当てはまる汎用版"です」</div></li>
       <li>「"あなたの仕事のどの場面に・どのツールを・どう当てるか"——ここは人によって全然違う。だから汎用版のまま進めると、ほとんどの人が2〜3週間で止まります」</li>
     </ul>
 
-    <!-- 5-4 -->
     <h3>5-4. Before → After（28:00〜30:00 ／ 900字）</h3>
-    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--text-secondary)">① 会社に残るルート</div>
+    <div class="route-label">① 会社に残るルート</div>
     <div class="ba-row">
       <div class="ba-cell before"><div class="ba-label">Before</div>年収500万の壁。頑張っているのに評価が上がらない。副収入ゼロ</div>
       <div class="ba-cell after"><div class="ba-label">After</div>AIで仕事の速度と質が上がり昇進・昇給。副業でも月10万の柱ができている</div>
     </div>
-    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--text-secondary)">② 別の会社を探すルート</div>
+    <div class="route-label">② 別の会社を探すルート</div>
     <div class="ba-row">
       <div class="ba-cell before"><div class="ba-label">Before</div>今の会社に将来性を感じない。でもスキルがない</div>
       <div class="ba-cell after"><div class="ba-label">After</div>AI活用の実績を武器にキャリアチェンジ成功。副業スキルで稼ぎの幅が広い</div>
     </div>
-    <div style="margin-bottom:6px;font-size:13px;font-weight:600;color:var(--text-secondary)">③ 独立するルート</div>
+    <div class="route-label">③ 独立するルート</div>
     <div class="ba-row">
       <div class="ba-cell before"><div class="ba-label">Before</div>会社に依存した働き方。自分のスキルで稼げる自信がない</div>
       <div class="ba-cell after"><div class="ba-label">After</div>副業で実績を作ってからフリーランスに移行。場所を選ばず仕事を選べる状態</div>
     </div>
-    <ul class="script" style="margin-top:8px">
+    <ul class="script" style="margin-top:10px">
       <li>「3つとも、まず大きいことはしない。小さな成功体験から始めて、気づいたら次のステージにいる——そういう設計です」</li>
     </ul>
 
-    <!-- 5-4b -->
     <h3>5-4b. 週単位のスケジュール設計（30:00〜32:00 ／ 600字）</h3>
-    <ul class="script" style="margin-bottom:8px">
+    <ul class="script" style="margin-bottom:10px">
       <li><div class="line-quote">「ここまでで"何をやるか"は見えてきたと思います。じゃあ次は"いつやるか"——これがないと、さっきの失敗パターン2に戻ります」</div></li>
     </ul>
-    <table class="schedule-table">
+    <table>
       <thead><tr><th>週</th><th>やること</th><th>目安時間</th></tr></thead>
       <tbody>
         <tr><td>1週目</td><td>AIツールを1つ選んで、今の仕事で試す</td><td>1日30分 × 5日</td></tr>
@@ -507,15 +438,14 @@
         <tr><td>2ヶ月目〜</td><td>ルートに合わせて具体的に動く（面談で一緒に設計）</td><td>週3〜5時間</td></tr>
       </tbody>
     </table>
-    <ul class="script" style="margin-top:8px">
+    <ul class="script" style="margin-top:10px">
       <li>「1日30分。通勤時間や昼休みでもできる量です」</li>
       <li><div class="line-quote">「——でも、これも汎用版です。営業職の人と事務職の人では、AIを当てる場所が全然違う」</div></li>
       <li>「やることはわかった。でも"自分の場合はどうすればいいか"がわからない——ここが、一人でやる限界です」</li>
     </ul>
 
-    <!-- 5-5 -->
     <h3>5-5. 「でも、一人では設計できない」— 3つの壁（32:00〜34:00 ／ 900字）</h3>
-    <ul class="script" style="margin-bottom:10px">
+    <ul class="script" style="margin-bottom:12px">
       <li>「ここまでで、"何をやればいいか"は全部お伝えしました。約束通りです」</li>
       <li><div class="line-quote">「でも——ここからが一番大事な話です。"わかること"と"できること"は違います」</div></li>
     </ul>
@@ -533,20 +463,20 @@
       <div class="wall-body">「一人で始めて3ヶ月続く人は、正直ほとんどいません。"今週これをやる"が決まっていて、誰かに報告する場所がある。それだけで続きます」</div>
     </div>
 
-    <ul class="script" style="margin-top:10px">
+    <ul class="script" style="margin-top:12px">
       <li><div class="line-quote">「だから、一緒に設計する場所を作りました」</div></li>
     </ul>
   </div>
 </div>
 
 <!-- ⑥ 面談シミュレーション -->
-<div class="card section-card s6">
+<div class="card s6">
   <div class="card-header">
     ⑥ 面談シミュレーション（34:00〜37:00）
-    <span><span class="badge badge-time">3分</span> <span class="badge badge-chars">900字</span></span>
+    <div class="badges"><span class="badge">3分</span><span class="badge">900字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">目的：面談の進め方を実演して見せることで、面談の怖さを消す</div>
+    <div class="purpose">面談の進め方を実演して見せることで、面談の怖さを消す</div>
 
     <div class="sim">
       <div class="sim-title">シミュレーション① 会社に残るルート（35歳・メーカー営業）</div>
@@ -571,20 +501,20 @@
       </div>
     </div>
 
-    <ul class="script" style="margin-top:8px">
+    <ul class="script" style="margin-top:10px">
       <li><div class="line-quote">「——こんな感じです。面談は、あなたの状況に合わせて、"最初の1ヶ月で何をやるか"を一緒に決める場所です」</div></li>
     </ul>
   </div>
 </div>
 
 <!-- ⑦ CTA・面談案内 -->
-<div class="card section-card s7">
+<div class="card s7">
   <div class="card-header">
     ⑦ スクール・面談のご案内（37:00〜44:00）
-    <span><span class="badge badge-time">7分</span> <span class="badge badge-chars">2,100字</span></span>
+    <div class="badges"><span class="badge">7分</span><span class="badge">2,100字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">目的：面談＝「STEP 0：方向性の仮決め」として位置づけ、申し込みのハードルを下げる</div>
+    <div class="purpose">面談＝「STEP 0：方向性の仮決め」として位置づけ、申し込みのハードルを下げる</div>
 
     <h4>7-1. 「売り込みません」の宣言</h4>
     <ul class="script">
@@ -617,7 +547,7 @@
       </tbody>
     </table>
 
-    <h4>7-3b. 面談で手に入るもの（成果物の明示）</h4>
+    <h4>7-3b. 面談で手に入るもの</h4>
     <ul class="script">
       <li>「そして、面談が終わったあと、一つお渡しするものがあります」</li>
       <li><div class="line-quote">「"あなた専用のアクションプランシート"です」（画面でサンプルを見せる）</div></li>
@@ -650,13 +580,13 @@
 </div>
 
 <!-- ⑧ 延長CTA -->
-<div class="card section-card s8">
+<div class="card s8">
   <div class="card-header">
     ⑧ エンド後・延長CTA（44:00〜47:00）
-    <span><span class="badge badge-time">3分</span> <span class="badge badge-chars">900字</span></span>
+    <div class="badges"><span class="badge">3分</span><span class="badge">900字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">目的：エンド画像を見てもまだ迷っている人を拾う</div>
+    <div class="purpose">エンド画像を見てもまだ迷っている人を拾う</div>
     <ul class="script">
       <li>エンド画像を10秒表示（「個別面談はこの動画下のボタンから」）</li>
       <li>「まだ迷っていますか？少しだけ追加でお話しします」</li>
@@ -677,9 +607,9 @@
   <tbody>
     <tr><td>トーン</td><td>メルマガ・LINEと同じ「ルナ」のキャラクター。馴れ馴れしすぎず、親しみやすく</td></tr>
     <tr><td>実績画像</td><td>②自己紹介で画面テロップ＋口頭で提示。金の盾・銀の盾は映像で見せる</td></tr>
-    <tr><td>実演シーン</td><td>⑤-3 で2種類の実演（資料作成＋画像/動画生成）を画面収録。「誰でもできる」の実感が鍵</td></tr>
+    <tr><td>実演シーン</td><td>⑤-3 で2種類の実演（資料作成＋画像/動画生成）を画面収録</td></tr>
     <tr><td>面談シミュレーション</td><td>⑥で3ルートの面談の進め方を実演。講師が一人語りで見せる</td></tr>
-    <tr><td>アクションプランシート</td><td>⑦-3bでサンプルを画面表示。「これが面談で手に入るもの」を映像で見せる</td></tr>
+    <tr><td>アクションプランシート</td><td>⑦-3bでサンプルを画面表示</td></tr>
     <tr><td>申し込み導線</td><td>⑦でLPへの導線を画面収録で見せる</td></tr>
     <tr><td>エンド画像</td><td>「個別面談はこの動画下のボタンから」を10秒表示。その後⑧延長CTAに入る</td></tr>
     <tr><td>長さ</td><td>本編47分＋延長3分＝約50分。⑤メソッド説明（20分）が核なので削らない</td></tr>
@@ -694,8 +624,8 @@
   <li>このプロットで方向性を確認</li>
   <li>③ストーリーのエピソードを肉付け（具体的なセリフレベルで）</li>
   <li>⑤-3 実演シーン：使用ツール・画面構成を決める</li>
-  <li>⑦-3b アクションプランシートのサンプルを作成（面談で画面表示する用）</li>
-  <li>⑥面談シミュレーション：実際の受講生事例が揃ったら事例パート追加も検討</li>
+  <li>⑦-3b アクションプランシートのサンプルを作成</li>
+  <li>⑥面談シミュレーション：受講生事例が揃ったら事例パート追加も検討</li>
   <li>台本の詳細作成（各セクションを文章に起こす）</li>
   <li>LP制作に入る（このプロットをベースにコピーを組む）</li>
 </ul>
