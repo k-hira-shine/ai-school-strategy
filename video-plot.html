@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>勉強会動画プロット（v4）</title>
+<title>勉強会動画プロット（v5）</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
@@ -151,9 +151,28 @@
 </style>
 </head>
 <body>
+<!-- ===== 更新履歴 =====
+  v5（2026-05-27）
+  ・④-0「今、何が起きているか」を新設
+      - 日経新聞2026年5月25日付（RAXUS調査）：中小企業6割AI未導入 / 大企業65%導入済み
+      - 海外→日本の3年遅れパターン → 3年以内に当たり前になる
+      - 月10万×3年＝360万円以上の年収差シミュレーション
+      - AIが量産・埋没・仕事消滅を引き起こす危機感（やっておかないとやばい）
+      - 「仕事が消える側 vs 作る側」への転換文で④-1へブリッジ
+  ・5-2「3つの道」にベネフィットを明示
+      - ①会社に残る → 経済的自由
+      - ②別の会社を探す → 選択の自由
+      - ③独立する → 時間的自由
+  ・5-3 に「360万の差は設計で決まる」を追加（④-0の数字を再回収）
+  ・Before/After の Before・After テキストを強化
+  ・⑥ 面談シミュレーション各ルートにベネフィット着地1文を追加
+  ・⑦ クロージングに「360万・差が広がる・仕事消滅」の再想起を追加
+  ・⑧ 延長CTA を「仕事が消える側」「ウィンドウが縮んでいる」に差し替え
+  ・全タイムスタンプ・文字数・合計時間を再計算（51分+3分＝54分）
+===== -->
 
-<h1>勉強会動画 プロット（v4）</h1>
-<p class="subtitle">作成日：2026-05-26</p>
+<h1>勉強会動画 プロット（v5）</h1>
+<p class="subtitle">作成日：2026-05-26　／　ステータス：v5（データで焦り作成④-0追加＋ベネフィット具体化＋仕事消滅の危機感追加）</p>
 
 <!-- ===== 前提設計 ===== -->
 <h2>前提設計</h2>
@@ -161,7 +180,7 @@
   <tbody>
     <tr><td style="font-weight:700;color:#222;width:140px">動画の役割</td><td>視聴後に面談申込へ動かす</td></tr>
     <tr><td style="font-weight:700;color:#222">ペルソナ</td><td>35歳会社員・年収500万の壁・副業ゼロ・難しいことはしたくない</td></tr>
-    <tr><td style="font-weight:700;color:#222">動画の長さ</td><td>47分（本編）＋ 3分（延長CTA）＝ 約50分</td></tr>
+    <tr><td style="font-weight:700;color:#222">動画の長さ</td><td>51分（本編）＋ 3分（延長CTA）＝ 約54分</td></tr>
     <tr><td style="font-weight:700;color:#222">話す速度</td><td>300字/分</td></tr>
     <tr><td style="font-weight:700;color:#222">視聴後のゴール</td><td>「自分でもできそう」＋「この人に相談したい」→ 面談申込</td></tr>
   </tbody>
@@ -185,8 +204,8 @@
   <div class="seg" style="flex:2;background:#3b82f6">① 2分</div>
   <div class="seg" style="flex:2;background:#8b5cf6">② 2分</div>
   <div class="seg" style="flex:5;background:#a855f7">③ 5分</div>
-  <div class="seg" style="flex:5;background:#10b981">④ 5分</div>
-  <div class="seg" style="flex:20;background:#f59e0b;color:#422006">⑤ 20分</div>
+  <div class="seg" style="flex:8;background:#10b981">④ 8分</div>
+  <div class="seg" style="flex:21;background:#f59e0b;color:#422006">⑤ 21分</div>
   <div class="seg" style="flex:3;background:#6366f1">⑥ 3分</div>
   <div class="seg" style="flex:7;background:#0891b2">⑦ 7分</div>
   <div class="seg" style="flex:3;background:#d946ef">⑧ 3分</div>
@@ -198,12 +217,12 @@
     <tr><td>①</td><td>あいさつ・予告</td><td>2分</td><td>600字</td><td>締切告知＋予告のみ</td></tr>
     <tr><td>②</td><td>自己紹介</td><td>2分</td><td>600字</td><td>実績3点＋動機1文</td></tr>
     <tr><td>③</td><td>ストーリー</td><td>5分</td><td>1,500字</td><td>Google時代の気づき→独立→確信→スクール設計</td></tr>
-    <tr><td>④</td><td>問題提起</td><td>5分</td><td>1,500字</td><td>失敗パターン3つ＋原因の明示＋回避策予告</td></tr>
-    <tr><td>⑤</td><td>メソッド説明</td><td>20分</td><td>6,600字</td><td>核心メッセージ＋3ルート＋実演＋ツール＋スケジュール＋3つの壁</td></tr>
+    <tr><td>④</td><td>問題提起</td><td>8分</td><td>2,400字</td><td>データで焦り（④-0）＋仕事消滅の危機感＋失敗パターン3つ＋原因の明示＋回避策予告</td></tr>
+    <tr><td>⑤</td><td>メソッド説明</td><td>21分</td><td>6,900字</td><td>核心メッセージ＋3ルート（ベネフィット付き）＋実演＋ツール＋スケジュール＋3つの壁</td></tr>
     <tr><td>⑥</td><td>面談シミュレーション</td><td>3分</td><td>900字</td><td>3ルート×面談の進め方を実演</td></tr>
     <tr><td>⑦</td><td>CTA・面談案内</td><td>7分</td><td>2,100字</td><td>面談＝STEP 0＋申込導線＋クロージング</td></tr>
     <tr><td>⑧</td><td>延長CTA</td><td>3分</td><td>900字</td><td>迷っている人向け再説得</td></tr>
-    <tr><td></td><td><strong>合計</strong></td><td><strong>47分＋3分</strong></td><td><strong>14,700字</strong></td><td></td></tr>
+    <tr><td></td><td><strong>合計</strong></td><td><strong>51分＋3分</strong></td><td><strong>15,900字</strong></td><td></td></tr>
   </tbody>
 </table>
 
@@ -286,13 +305,31 @@
 <!-- ④ 問題提起 -->
 <div class="card s4">
   <div class="card-header">
-    ④ 問題提起（9:00〜14:00）
-    <div class="badges"><span class="badge">5分</span><span class="badge">1,500字</span></div>
+    ④ 問題提起（9:00〜17:00）
+    <div class="badges"><span class="badge">8分</span><span class="badge">2,400字</span></div>
   </div>
   <div class="card-body">
-    <div class="purpose">視聴者の心の声を代弁して「自分のための動画だ」を確定させる</div>
+    <div class="purpose">まずデータで「今動かないとやばい」という焦りを作り、その上で「自分のための動画だ」を確定させる</div>
 
-    <h4>3つの失敗パターン</h4>
+    <h4>4-0. 「今、何が起きているか」— データで焦りを作る（9:00〜12:00）</h4>
+    <ul class="script">
+      <li><div class="line-quote">「少し、現実の話をさせてください」</div></li>
+      <li>「2026年5月、日経新聞が報じた調査があります。日本の中小企業の6割が、今もAIを<strong>"導入予定なし"</strong>と答えています」<br><span style="font-size:13px;color:#888">（出典：RAXUS調査、日経新聞2026年5月25日付）</span></li>
+      <li>「一方で、大企業はすでに<strong>65%が導入済み</strong>です」</li>
+      <li>「歴史を見ると、海外でトレンドになったものが日本に来るまで、だいたい3年かかります。SNSもスマホも、海外の3年後でした。AIも例外じゃない」</li>
+      <li>「つまり、今から3年以内に、日本でもAIを使いこなすのが"当たり前"になります」</li>
+      <li>「AIで副収入を作ると、保守的に見ても<strong>月10万円</strong>は現実的なラインです。1年目：月10万×12ヶ月＝年120万円。2年目、3年目と積み上がりながらスキルが上がるにつれて単価も上がる」</li>
+      <li><div class="line-quote">「3年で累計<strong>360万円以上の差</strong>。そこから投資や資産形成に回せば、5年後・10年後は取り返しのつかない差になります」</div></li>
+      <li>「——でも、正直に言うと、怖いのはそれだけじゃありません」</li>
+      <li>「AIが当たり前になると、全員が同じツールを使って、<strong>同じような成果物を量産</strong>するようになります」</li>
+      <li>「文章も、画像も、動画も。AIで作ったものが世の中にあふれる。その中で、"AIを使えます"というだけでは何の差別化にもならなくなる」</li>
+      <li>「そのとき困るのは、"AIを使ったことがない人"だけじゃありません。<strong>"AIに使われているだけの人"も埋もれます</strong>」</li>
+      <li><div class="line-quote">「"AIを活用すると有利"という時代は、もう終わっています。次は<strong>"使いこなせないと仕事がなくなる"</strong>という時代です」</div></li>
+      <li>「<strong>やっておくと得をする、じゃなくて——やっておかないとマジでやばい。</strong>それが今の現実です」</li>
+      <li>「じゃあ、動けばいいだけの話なのに——なぜ多くの人が動けないのか？どうすれば<strong>"仕事が消える側"ではなく"仕事を作る側"</strong>に回れるのか。その答えと、動けない原因を両方これから話します」</li>
+    </ul>
+
+    <h4>4-1. 3つの失敗パターン（12:00〜17:00）</h4>
     <div class="pattern">
       <div class="pat-title">パターン1：「何から始めればいいかわからない」</div>
       <div class="pat-body">ツールは触った。でも"自分の仕事のどこに使うか"がないから止まる</div>
@@ -325,13 +362,13 @@
 <!-- ⑤ メソッド説明 -->
 <div class="card s5">
   <div class="card-header">
-    ⑤ メソッド説明（14:00〜34:00）
-    <div class="badges"><span class="badge">20分</span><span class="badge">6,600字</span></div>
+    ⑤ メソッド説明（17:00〜38:00）
+    <div class="badges"><span class="badge">21分</span><span class="badge">6,900字</span></div>
   </div>
   <div class="card-body">
     <div class="purpose">「この方法は本物だ」「自分にもできる」を論理と実演で証明し、「でも一人では設計できない」→ 面談へのブリッジを作る</div>
 
-    <h3>5-1. 核心メッセージ（14:00〜17:00 ／ 900字）</h3>
+    <h3>5-1. 核心メッセージ（17:00〜20:00 ／ 900字）</h3>
     <ul class="script">
       <li><div class="line-quote">「AIを使って年収を上げる。やることは一つです」</div></li>
       <li><div class="line-quote">「"AIを使って仕事の成果を上げる設計を作る"。これだけ」</div></li>
@@ -339,20 +376,20 @@
       <li>「この設計ができると、3つの道が勝手に開きます」</li>
     </ul>
 
-    <h3>5-2. 3つの道（17:00〜20:00 ／ 900字）</h3>
+    <h3>5-2. 3つの道（20:00〜24:00 ／ 1,200字）</h3>
     <p class="script" style="margin-bottom:12px">「AIで仕事の成果を上げられるようになると、選択肢が生まれます」</p>
     <div class="route-grid">
       <div class="route-card">
         <div class="route-name">① 会社に残る</div>
-        <div class="route-desc">AIで本業の成果を上げて出世する。同時に、副業で収入の柱も作る。<br>「今の会社にいながら、年収も上がるし副収入もできる。一番リスクが低い道です」</div>
+        <div class="route-desc">AIで本業の成果を上げて出世する。同時に、副業で収入の柱も作る。<br>「今の会社にいながら、年収も上がるし副収入もできる。一番リスクが低い道です」<br><span style="display:inline-block;margin-top:6px;font-size:13px;color:#059669;font-weight:600">✦ 経済的自由：副収入月10万を超えると"この会社にしがみつかなくていい"という精神的余裕が生まれる</span></div>
       </div>
       <div class="route-card">
         <div class="route-name">② 別の会社を探す</div>
-        <div class="route-desc">AI活用の実績を武器に、より条件のいい会社に転職する。副業スキルがあるから稼ぎ方の幅が広がる。<br>「転職市場で"AIでこういう成果を出しました"と言える人は、今ほとんどいません」</div>
+        <div class="route-desc">AI活用の実績を武器に、より条件のいい会社に転職する。副業スキルがあるから稼ぎ方の幅が広がる。<br>「転職市場で"AIでこういう成果を出しました"と言える人は、今ほとんどいません」<br><span style="display:inline-block;margin-top:6px;font-size:13px;color:#059669;font-weight:600">✦ 選択の自由：「会社を選ぶ側」になれる。今の職場への不満・不安から解放される</span></div>
       </div>
       <div class="route-card">
         <div class="route-name">③ 独立する</div>
-        <div class="route-desc">AIスキルで仕事を受注してフリーランスになる。副業で身につけたスキルがそのまま本業になる。<br>「いきなり独立じゃない。副業で実績を作ってから独立するので、リスクが小さい」</div>
+        <div class="route-desc">AIスキルで仕事を受注してフリーランスになる。副業で身につけたスキルがそのまま本業になる。<br>「いきなり独立じゃない。副業で実績を作ってから独立するので、リスクが小さい」<br><span style="display:inline-block;margin-top:6px;font-size:13px;color:#059669;font-weight:600">✦ 時間的自由：通勤ゼロ、働く時間・場所・量を自分で決められる状態</span></div>
       </div>
     </div>
     <ul class="script">
@@ -360,7 +397,7 @@
       <li>「どの道が自分に合っているかは、今の段階ではわからなくて当然です。それを一緒に決めるところから始めます」</li>
     </ul>
 
-    <h3>5-3. STEP 1の実演：AIで仕事の成果を上げる（20:00〜28:00 ／ 2,400字）</h3>
+    <h3>5-3. STEP 1の実演：AIで仕事の成果を上げる（24:00〜32:00 ／ 2,400字）</h3>
     <p class="script" style="margin-bottom:10px">STEP 0（面談）で方向性を仮決めした後、STEP 1は全員共通——「AIを使って、今の仕事の成果を上げる」。</p>
 
     <h4>なぜここから始めるか</h4>
@@ -377,6 +414,7 @@
       <li>AIを使って画像・動画を生成するデモ（テキスト入力→画像/映像が出る）</li>
       <li><div class="line-quote">「難しい勉強ゼロ・プログラミングゼロ。やっていることは"指示を出して、仕上げる"だけです」</div></li>
       <li>「この2つ（資料＋画像/動画）ができるだけで、副業の案件は取れるし、本業でも周りと差がつきます」</li>
+      <li><div class="line-quote">「さっき"3年で360万円の差"の話をしましたよね。あの差は、AIを触った回数で決まるんじゃない。<strong>"設計を持って動いたかどうか"</strong>で決まる。今このタイミングで始める人が先行者になれます」</div></li>
     </ul>
 
     <h4>AIツールの選び方と使い分け</h4>
@@ -398,27 +436,27 @@
       <li>「"あなたの仕事のどの場面に・どのツールを・どう当てるか"——ここは人によって全然違う。だから汎用版のまま進めると、ほとんどの人が2〜3週間で止まります」</li>
     </ul>
 
-    <h3>5-4. Before → After（28:00〜30:00 ／ 900字）</h3>
+    <h3>5-4. Before → After（32:00〜34:00 ／ 600字）</h3>
     <div class="route-label">① 会社に残るルート</div>
     <div class="ba-row">
-      <div class="ba-cell before"><div class="ba-label">Before</div>年収500万の壁。頑張っているのに評価が上がらない。副収入ゼロ</div>
-      <div class="ba-cell after"><div class="ba-label">After</div>AIで仕事の速度と質が上がり昇進・昇給。副業でも月10万の柱ができている</div>
+      <div class="ba-cell before"><div class="ba-label">Before</div>年収500万の壁。頑張っているのに評価が上がらない。副収入ゼロ。給料日前に財布を気にしている</div>
+      <div class="ba-cell after"><div class="ba-label">After</div>AIで仕事の速度と質が上がり昇進・昇給。副業でも月10万の柱ができ、<strong>"辞めてもいい"という経済的余裕が生まれている</strong></div>
     </div>
     <div class="route-label">② 別の会社を探すルート</div>
     <div class="ba-row">
-      <div class="ba-cell before"><div class="ba-label">Before</div>今の会社に将来性を感じない。でもスキルがない</div>
-      <div class="ba-cell after"><div class="ba-label">After</div>AI活用の実績を武器にキャリアチェンジ成功。副業スキルで稼ぎの幅が広い</div>
+      <div class="ba-cell before"><div class="ba-label">Before</div>今の会社に将来性を感じない。でもスキルがない。転職したくても武器がない</div>
+      <div class="ba-cell after"><div class="ba-label">After</div>AI活用の実績を武器にキャリアチェンジ成功。<strong>「会社を選ぶ側」になれた。不満・不安から解放され、自分の条件で仕事を選べる状態</strong></div>
     </div>
     <div class="route-label">③ 独立するルート</div>
     <div class="ba-row">
-      <div class="ba-cell before"><div class="ba-label">Before</div>会社に依存した働き方。自分のスキルで稼げる自信がない</div>
-      <div class="ba-cell after"><div class="ba-label">After</div>副業で実績を作ってからフリーランスに移行。場所を選ばず仕事を選べる状態</div>
+      <div class="ba-cell before"><div class="ba-label">Before</div>会社に依存した働き方。自分のスキルで稼げる自信がない。毎朝同じ時間に起きて通勤している</div>
+      <div class="ba-cell after"><div class="ba-label">After</div>副業で実績を作ってからフリーランスに移行。<strong>通勤ゼロ、働く時間・場所・量を自分で決められる時間的自由を手に入れた</strong></div>
     </div>
     <ul class="script" style="margin-top:10px">
       <li>「3つとも、まず大きいことはしない。小さな成功体験から始めて、気づいたら次のステージにいる——そういう設計です」</li>
     </ul>
 
-    <h3>5-4b. 週単位のスケジュール設計（30:00〜32:00 ／ 600字）</h3>
+    <h3>5-4b. 週単位のスケジュール設計（34:00〜36:00 ／ 600字）</h3>
     <ul class="script" style="margin-bottom:10px">
       <li><div class="line-quote">「ここまでで"何をやるか"は見えてきたと思います。じゃあ次は"いつやるか"——これがないと、さっきの失敗パターン2に戻ります」</div></li>
     </ul>
@@ -437,7 +475,7 @@
       <li>「やることはわかった。でも"自分の場合はどうすればいいか"がわからない——ここが、一人でやる限界です」</li>
     </ul>
 
-    <h3>5-5. 「でも、一人では設計できない」— 3つの壁（32:00〜34:00 ／ 900字）</h3>
+    <h3>5-5. 「でも、一人では設計できない」— 3つの壁（36:00〜38:00 ／ 900字）</h3>
     <ul class="script" style="margin-bottom:12px">
       <li>「ここまでで、"何をやればいいか"は全部お伝えしました。約束通りです」</li>
       <li><div class="line-quote">「でも——ここからが一番大事な話です。"わかること"と"できること"は違います」</div></li>
@@ -465,7 +503,7 @@
 <!-- ⑥ 面談シミュレーション -->
 <div class="card s6">
   <div class="card-header">
-    ⑥ 面談シミュレーション（34:00〜37:00）
+    ⑥ 面談シミュレーション（38:00〜41:00）
     <div class="badges"><span class="badge">3分</span><span class="badge">900字</span></div>
   </div>
   <div class="card-body">
@@ -476,21 +514,24 @@
       <div class="sim-body">
         「例えばあなたが営業職だとします。面談ではまずこう聞きます——"今の仕事で一番時間がかかっている作業は何ですか？"」<br>
         「"提案資料の作成に毎回3時間かかる"と言われたら、AIで資料のドラフトを作る方法を提案します。これがSTEP 1の入口」<br>
-        「本業の成果が上がれば出世の材料になるし、同じスキルで副業もできる。このプランを一緒に作ります」
+        「本業の成果が上がれば出世の材料になるし、同じスキルで副業もできる。このプランを一緒に作ります」<br>
+        <span style="color:#059669;font-weight:600">→ 半年後には副収入月10万が見えてきて、"この会社にしがみつかなくていい"という経済的余裕が手に入っている状態です</span>
       </div>
     </div>
     <div class="sim">
       <div class="sim-title">シミュレーション② 別の会社を探すルート（28歳・事務職）</div>
       <div class="sim-body">
         「"今の会社に将来性を感じない"と言われたら、まず聞くのは"転職先で何ができる人になりたいか"」<br>
-        「"AIを使ってマーケティングができる人"なら、まず今の仕事でAIを使った実績を3ヶ月で作る。それが職務経歴書に書ける武器になる」
+        「"AIを使ってマーケティングができる人"なら、まず今の仕事でAIを使った実績を3ヶ月で作る。それが職務経歴書に書ける武器になる」<br>
+        <span style="color:#059669;font-weight:600">→ 3ヶ月後には"会社を選ぶ側"になれる。応募してお願いする転職から、スカウトされる転職に変わります</span>
       </div>
     </div>
     <div class="sim">
       <div class="sim-title">シミュレーション③ 独立するルート（34歳・Web制作）</div>
       <div class="sim-body">
         「"いつか独立したい"と言われたら、"いきなり独立"は絶対に勧めません」<br>
-        「まず副業でAI画像・動画制作の案件を取る。月5〜10万の実績ができてから独立を考える。このステップを一緒に設計します」
+        「まず副業でAI画像・動画制作の案件を取る。月5〜10万の実績ができてから独立を考える。このステップを一緒に設計します」<br>
+        <span style="color:#059669;font-weight:600">→ 半年〜1年後には、通勤ゼロ・自分で時間と場所を選べる働き方が現実になっている。"設計"で辿り着くので、不安がない</span>
       </div>
     </div>
 
@@ -503,7 +544,7 @@
 <!-- ⑦ CTA・面談案内 -->
 <div class="card s7">
   <div class="card-header">
-    ⑦ スクール・面談のご案内（37:00〜44:00）
+    ⑦ スクール・面談のご案内（41:00〜48:00）
     <div class="badges"><span class="badge">7分</span><span class="badge">2,100字</span></div>
   </div>
   <div class="card-body">
@@ -567,6 +608,8 @@
     <ul class="script">
       <li><div class="line-quote">「行動が遅い人ほど、半年後に同じことを検索しています」</div></li>
       <li>「迷っている間に、先に動いた人がどんどん結果を出していきます」</li>
+      <li>「さっきの話を思い出してください。<strong>3年で360万円の差。しかもその差は年々広がる。そして動かなかった人の仕事は、順番に消えていく</strong>」</li>
+      <li>「今日この動画を見て"やばい"と思った。その感情が残っているうちに、動いてください」</li>
       <li>「まず話だけでも。待っています」で静かに締める</li>
     </ul>
   </div>
@@ -575,7 +618,7 @@
 <!-- ⑧ 延長CTA -->
 <div class="card s8">
   <div class="card-header">
-    ⑧ エンド後・延長CTA（44:00〜47:00）
+    ⑧ エンド後・延長CTA（48:00〜51:00）
     <div class="badges"><span class="badge">3分</span><span class="badge">900字</span></div>
   </div>
   <div class="card-body">
@@ -585,7 +628,8 @@
       <li>「まだ迷っていますか？少しだけ追加でお話しします」</li>
       <li>「今のままAIの情報を見続けて、半年後どうなっているかを想像してみてください」</li>
       <li>「AIは変化が速い。去年使えた方法が今年は通用しないことが普通に起きています」</li>
-      <li><div class="line-quote">「今この瞬間に動いた人だけが、次のステージに行ける。それだけです」</div></li>
+      <li>「半年後——周りがAIで成果物を量産している中で、あなたはまだ"何から始めよう"と考えている。そのとき、仕事を発注する側はあなたに頼む理由がありますか？」</li>
+      <li><div class="line-quote">「"仕事が消える側"になりたくないなら、今動いてください。あと3年のウィンドウは、半年前と比べてもう半年短くなっています」</div></li>
       <li>「動画下のボタンから今すぐ申し込んでください。〇月〇日で締め切ります」</li>
       <li>「それでは面談でお会いしましょう」</li>
     </ul>
@@ -605,7 +649,7 @@
     <tr><td>アクションプランシート</td><td>⑦-3bでサンプルを画面表示</td></tr>
     <tr><td>申し込み導線</td><td>⑦でLPへの導線を画面収録で見せる</td></tr>
     <tr><td>エンド画像</td><td>「個別面談はこの動画下のボタンから」を10秒表示。その後⑧延長CTAに入る</td></tr>
-    <tr><td>長さ</td><td>本編47分＋延長3分＝約50分。⑤メソッド説明（20分）が核なので削らない</td></tr>
+    <tr><td>長さ</td><td>本編51分＋延長3分＝約54分。⑤メソッド説明（21分）が核なので削らない</td></tr>
   </tbody>
 </table>
 
